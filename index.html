@@ -155,23 +155,6 @@
             margin-bottom: 20px;
         }
 
-        .activity-log {
-            max-height: 200px;
-            overflow-y: auto;
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-
-        .activity-item {
-            padding: 8px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            font-size: 0.85rem;
-            background: white;
-        }
-
         @media (max-width: 768px) {
             .main-container {
                 padding: 20px;
@@ -358,14 +341,6 @@
                     <i class="bi bi-download"></i> Exportar Lista
                 </button>
             </div>
-
-            <!-- Activity Log -->
-            <div class="mt-4">
-                <h5><i class="bi bi-activity"></i> Atividade Recente</h5>
-                <div class="activity-log" id="activityLog">
-                    <p class="text-muted text-center">Sem atividade recente</p>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -459,7 +434,7 @@
         // ==========================================
         // ⚠️ ATENÇÃO: SUBSTITUI ESTAS CREDENCIAIS PELAS TUAS DO FIREBASE!
         // ==========================================
-        const firebaseConfig = {
+       const firebaseConfig = {
   apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
   authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
   databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
@@ -481,7 +456,6 @@
         let currentCategoryFilter = 'all';
         let currentUser = localStorage.getItem('currentUser') || '';
         let unsubscribeListener = null;
-        let activityLogs = [];
 
         const categoryColors = {
             'Frutas': '#ff6b6b',
@@ -572,17 +546,6 @@
                     updateSyncStatus('offline');
                     showNotification('Erro de conexão. Verifica as configurações do Firebase.', 'danger');
                 });
-
-            db.collection('activityLog')
-                .orderBy('timestamp', 'desc')
-                .limit(20)
-                .onSnapshot((snapshot) => {
-                    activityLogs = [];
-                    snapshot.forEach((doc) => {
-                        activityLogs.push(doc.data());
-                    });
-                    renderActivityLog();
-                });
         }
 
         function updateSyncStatus(status) {
@@ -620,7 +583,6 @@
                 };
 
                 await db.collection('shoppingList').add(newItem);
-                await addActivityLog(`${currentUser} adicionou "${newItem.name}"`);
                 
                 this.reset();
                 document.getElementById('itemQuantity').value = 1;
@@ -649,9 +611,6 @@
                         updatedBy: currentUser,
                         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                    
-                    const action = item.completed ? 'desmarcou' : 'marcou como comprado';
-                    await addActivityLog(`${currentUser} ${action} "${item.name}"`);
                 }
             } catch (error) {
                 console.error('Erro ao atualizar:', error);
@@ -668,13 +627,7 @@
             
             if (confirm('Tens a certeza que queres eliminar este item?')) {
                 try {
-                    const item = shoppingItems.find(i => i.id === id);
                     await db.collection('shoppingList').doc(id).delete();
-                    
-                    if (item) {
-                        await addActivityLog(`${currentUser} eliminou "${item.name}"`);
-                    }
-                    
                     showNotification('Item eliminado!', 'danger');
                 } catch (error) {
                     console.error('Erro ao eliminar:', error);
@@ -706,7 +659,6 @@
             
             try {
                 const id = document.getElementById('editItemId').value;
-                const oldItem = shoppingItems.find(i => i.id === id);
                 
                 const updates = {
                     name: document.getElementById('editItemName').value.trim(),
@@ -718,10 +670,6 @@
                 };
 
                 await db.collection('shoppingList').doc(id).update(updates);
-                
-                if (oldItem && oldItem.name !== updates.name) {
-                    await addActivityLog(`${currentUser} editou "${oldItem.name}" para "${updates.name}"`);
-                }
                 
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
                 modal.hide();
@@ -753,8 +701,6 @@
                         });
                         
                         await batch.commit();
-                        await addActivityLog(`${currentUser} limpou ${completedItems.length} itens comprados`);
-                        
                         showNotification('Itens comprados eliminados!', 'warning');
                     } catch (error) {
                         console.error('Erro ao limpar:', error);
@@ -784,8 +730,6 @@
                         });
                         
                         await batch.commit();
-                        await addActivityLog(`${currentUser} limpou toda a lista (${shoppingItems.length} itens)`);
-                        
                         showNotification('Lista completamente limpa!', 'danger');
                     } catch (error) {
                         console.error('Erro ao limpar tudo:', error);
@@ -793,40 +737,6 @@
                     }
                 }
             }
-        }
-
-        async function addActivityLog(message) {
-            try {
-                await db.collection('activityLog').add({
-                    message: message,
-                    user: currentUser,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch (error) {
-                console.error('Erro ao adicionar log:', error);
-            }
-        }
-
-        function renderActivityLog() {
-            const container = document.getElementById('activityLog');
-            
-            if (activityLogs.length === 0) {
-                container.innerHTML = '<p class="text-muted text-center">Sem atividade recente</p>';
-                return;
-            }
-            
-            let html = '';
-            activityLogs.slice(0, 10).forEach(log => {
-                const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString('pt-PT') : 'Agora';
-                html += `
-                    <div class="activity-item">
-                        <small class="text-muted">${time}</small><br>
-                        <strong>${log.message}</strong>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
         }
 
         function renderItems() {
