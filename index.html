@@ -99,15 +99,6 @@
             color: var(--secondary-color);
         }
 
-        .item-card.syncing {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
         .btn-action {
             width: 35px;
             height: 35px;
@@ -179,16 +170,6 @@
             border-radius: 5px;
             font-size: 0.85rem;
             background: white;
-        }
-
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .loading-spinner.active {
-            display: block;
         }
 
         @media (max-width: 768px) {
@@ -355,18 +336,8 @@
                 </div>
             </div>
 
-            <!-- Loading Spinner -->
-            <div id="loadingSpinner" class="loading-spinner">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">A carregar...</span>
-                </div>
-                <p class="mt-2">A sincronizar dados...</p>
-            </div>
-
             <!-- Shopping List -->
-            <div id="shoppingList">
-                <!-- Items will be dynamically inserted here -->
-            </div>
+            <div id="shoppingList"></div>
 
             <!-- Empty State -->
             <div id="emptyState" class="empty-state" style="display: none;">
@@ -486,9 +457,9 @@
 
     <script>
         // ==========================================
-        // CONFIGURAÇÃO DO FIREBASE
+        // ⚠️ ATENÇÃO: SUBSTITUI ESTAS CREDENCIAIS PELAS TUAS DO FIREBASE!
         // ==========================================
-        // const firebaseConfig = {
+        const firebaseConfig = {
   apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
   authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
   databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
@@ -497,6 +468,7 @@
   messagingSenderId: "32405618087",
   appId: "1:32405618087:web:eebf45b54be249534e8a82"
 };
+
         // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
@@ -511,7 +483,6 @@
         let unsubscribeListener = null;
         let activityLogs = [];
 
-        // Category colors mapping
         const categoryColors = {
             'Frutas': '#ff6b6b',
             'Vegetais': '#51cf66',
@@ -549,9 +520,6 @@
             renderCategoryFilters();
         });
 
-        // ==========================================
-        // GESTÃO DE UTILIZADORES
-        // ==========================================
         function checkUser() {
             if (!currentUser) {
                 const modal = new bootstrap.Modal(document.getElementById('userModal'));
@@ -581,13 +549,9 @@
             }
         }
 
-        // ==========================================
-        // SINCRONIZAÇÃO EM TEMPO REAL COM FIREBASE
-        // ==========================================
         function setupRealtimeListener() {
             updateSyncStatus('connecting');
             
-            // Listener em tempo real para items
             unsubscribeListener = db.collection('shoppingList')
                 .orderBy('createdAt', 'desc')
                 .onSnapshot((snapshot) => {
@@ -603,15 +567,12 @@
                     updateStats();
                     renderCategoryFilters();
                     updateSyncStatus('online');
-                    
-                    console.log('Dados sincronizados:', shoppingItems.length, 'items');
                 }, (error) => {
                     console.error('Erro na sincronização:', error);
                     updateSyncStatus('offline');
-                    showNotification('Erro de conexão. Tenta novamente.', 'danger');
+                    showNotification('Erro de conexão. Verifica as configurações do Firebase.', 'danger');
                 });
 
-            // Listener para logs de atividade
             db.collection('activityLog')
                 .orderBy('timestamp', 'desc')
                 .limit(20)
@@ -638,11 +599,6 @@
             }
         }
 
-        // ==========================================
-        // OPERAÇÕES CRUD COM FIREBASE
-        // ==========================================
-        
-        // Adicionar item
         document.getElementById('addItemForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -664,8 +620,6 @@
                 };
 
                 await db.collection('shoppingList').add(newItem);
-                
-                // Adicionar log de atividade
                 await addActivityLog(`${currentUser} adicionou "${newItem.name}"`);
                 
                 this.reset();
@@ -674,11 +628,10 @@
                 showNotification('Item adicionado e sincronizado!', 'success');
             } catch (error) {
                 console.error('Erro ao adicionar:', error);
-                showNotification('Erro ao adicionar item. Tenta novamente.', 'danger');
+                showNotification('Erro ao adicionar item. Verifica a conexão.', 'danger');
             }
         });
 
-        // Toggle complete
         async function toggleComplete(id) {
             if (!currentUser) {
                 showNotification('Identifica-te primeiro!', 'warning');
@@ -706,7 +659,6 @@
             }
         }
 
-        // Delete item
         async function deleteItem(id) {
             if (!currentUser) {
                 showNotification('Identifica-te primeiro!', 'warning');
@@ -717,7 +669,6 @@
             if (confirm('Tens a certeza que queres eliminar este item?')) {
                 try {
                     const item = shoppingItems.find(i => i.id === id);
-                    
                     await db.collection('shoppingList').doc(id).delete();
                     
                     if (item) {
@@ -732,7 +683,20 @@
             }
         }
 
-        // Edit item
+        function openEditModal(id) {
+            const item = shoppingItems.find(i => i.id === id);
+            if (item) {
+                document.getElementById('editItemId').value = item.id;
+                document.getElementById('editItemName').value = item.name;
+                document.getElementById('editItemCategory').value = item.category;
+                document.getElementById('editItemQuantity').value = item.quantity;
+                document.getElementById('editItemUnit').value = item.unit;
+                
+                const modal = new bootstrap.Modal(document.getElementById('editModal'));
+                modal.show();
+            }
+        }
+
         async function saveEdit() {
             if (!currentUser) {
                 showNotification('Identifica-te primeiro!', 'warning');
@@ -769,7 +733,6 @@
             }
         }
 
-        // Clear completed
         async function clearCompleted() {
             if (!currentUser) {
                 showNotification('Identifica-te primeiro!', 'warning');
@@ -790,7 +753,6 @@
                         });
                         
                         await batch.commit();
-                        
                         await addActivityLog(`${currentUser} limpou ${completedItems.length} itens comprados`);
                         
                         showNotification('Itens comprados eliminados!', 'warning');
@@ -804,7 +766,6 @@
             }
         }
 
-        // Clear all
         async function clearAll() {
             if (!currentUser) {
                 showNotification('Identifica-te primeiro!', 'warning');
@@ -823,7 +784,6 @@
                         });
                         
                         await batch.commit();
-                        
                         await addActivityLog(`${currentUser} limpou toda a lista (${shoppingItems.length} itens)`);
                         
                         showNotification('Lista completamente limpa!', 'danger');
@@ -835,9 +795,6 @@
             }
         }
 
-        // ==========================================
-        // LOGS DE ATIVIDADE
-        // ==========================================
         async function addActivityLog(message) {
             try {
                 await db.collection('activityLog').add({
@@ -872,14 +829,10 @@
             container.innerHTML = html;
         }
 
-        // ==========================================
-        // RENDERIZAÇÃO DA INTERFACE
-        // ==========================================
         function renderItems() {
             const container = document.getElementById('shoppingList');
             const emptyState = document.getElementById('emptyState');
             
-            // Filter items
             let filteredItems = shoppingItems;
             
             if (currentFilter === 'pending') {
@@ -900,7 +853,6 @@
 
             emptyState.style.display = 'none';
             
-            // Group by category
             const grouped = {};
             filteredItems.forEach(item => {
                 if (!grouped[item.category]) {
@@ -914,41 +866,27 @@
                 const color = categoryColors[category] || '#868e96';
                 const emoji = categoryEmojis[category] || '📦';
                 
-                html += `
-                    <div class="mb-4">
-                        <h6 class="fw-bold mb-3" style="color: ${color};">
-                            ${emoji} ${category} (${grouped[category].length})
-                        </h6>
-                `;
+                html += `<div class="mb-4"><h6 class="fw-bold mb-3" style="color: ${color};">${emoji} ${category} (${grouped[category].length})</h6>`;
                 
                 grouped[category].forEach(item => {
-                    const creatorInfo = item.createdBy ? `<br><small class="text-muted">Adicionado por: ${item.createdBy}</small>` : '';
+                    const creatorInfo = item.createdBy ? `<br><small class="text-muted">Por: ${item.createdBy}</small>` : '';
                     
                     html += `
                         <div class="item-card ${item.completed ? 'checked' : ''}" data-id="${item.id}">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1">
                                     <div class="d-flex align-items-center gap-2 mb-1">
-                                        <input type="checkbox" 
-                                               class="form-check-input" 
-                                               ${item.completed ? 'checked' : ''} 
-                                               onchange="toggleComplete('${item.id}')">
+                                        <input type="checkbox" class="form-check-input" ${item.completed ? 'checked' : ''} onchange="toggleComplete('${item.id}')">
                                         <span class="item-name fw-bold">${item.name}</span>
-                                        <span class="badge" style="background-color: ${color}; color: white;">
-                                            ${item.quantity} ${item.unit}
-                                        </span>
+                                        <span class="badge" style="background-color: ${color}; color: white;">${item.quantity} ${item.unit}</span>
                                     </div>
                                     ${creatorInfo}
                                 </div>
                                 <div>
-                                    <button class="btn btn-sm btn-action btn-outline-primary" 
-                                            onclick="openEditModal('${item.id}')" 
-                                            title="Editar">
+                                    <button class="btn btn-sm btn-action btn-outline-primary" onclick="openEditModal('${item.id}')" title="Editar">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-action btn-outline-danger" 
-                                            onclick="deleteItem('${item.id}')" 
-                                            title="Eliminar">
+                                    <button class="btn btn-sm btn-action btn-outline-danger" onclick="deleteItem('${item.id}')" title="Eliminar">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -963,28 +901,12 @@
             container.innerHTML = html;
         }
 
-        function openEditModal(id) {
-            const item = shoppingItems.find(i => i.id === id);
-            if (item) {
-                document.getElementById('editItemId').value = item.id;
-                document.getElementById('editItemName').value = item.name;
-                document.getElementById('editItemCategory').value = item.category;
-                document.getElementById('editItemQuantity').value = item.quantity;
-                document.getElementById('editItemUnit').value = item.unit;
-                
-                const modal = new bootstrap.Modal(document.getElementById('editModal'));
-                modal.show();
-            }
-        }
-
         function filterItems(filter) {
             currentFilter = filter;
-            
             document.querySelectorAll('.filter-buttons .btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.closest('button').classList.add('active');
-            
             renderItems();
         }
 
@@ -1002,11 +924,7 @@
             categories.forEach(cat => {
                 const color = categoryColors[cat] || '#868e96';
                 const emoji = categoryEmojis[cat] || '📦';
-                html += `<span class="badge category-badge" 
-                             style="background-color: ${color}; color: white;" 
-                             onclick="filterByCategory('${cat}')">
-                            ${emoji} ${cat}
-                         </span>`;
+                html += `<span class="badge category-badge" style="background-color: ${color}; color: white;" onclick="filterByCategory('${cat}')">${emoji} ${cat}</span>`;
             });
             
             container.innerHTML = html;
@@ -1042,8 +960,7 @@
 
             Object.keys(grouped).sort().forEach(category => {
                 const emoji = categoryEmojis[category] || '📦';
-                text += `${emoji} ${category}\n`;
-                text += '───────────────────────────────\n';
+                text += `${emoji} ${category}\n───────────────────────────────\n`;
                 
                 grouped[category].forEach(item => {
                     const status = item.completed ? '✓' : '○';
@@ -1067,10 +984,7 @@
         function showNotification(message, type) {
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type} alert-dismissible fade show notification-toast`;
-            alertDiv.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
+            alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
             document.body.appendChild(alertDiv);
             
             setTimeout(() => {
@@ -1078,7 +992,6 @@
             }, 3000);
         }
 
-        // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
             if (unsubscribeListener) {
                 unsubscribeListener();
