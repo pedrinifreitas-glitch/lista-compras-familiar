@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Compras Familiar - Sincronizada</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #858796;
+            --success-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --warning-color: #f6c23e;
+            --info-color: #36b9cc;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .header-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .sync-status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .sync-status.online {
+            background: rgba(28, 200, 138, 0.1);
+            color: var(--success-color);
+        }
+
+        .sync-status.offline {
+            background: rgba(231, 74, 59, 0.1);
+            color: var(--danger-color);
+        }
+
+        .category-badge {
+            font-size: 0.85rem;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-right: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+        }
+
+        .item-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .item-card.checked {
+            opacity: 0.6;
+            background: #f8f9fa;
+        }
+
+        .item-card.checked .item-name {
+            text-decoration: line-through;
+            color: var(--secondary-color);
+        }
+
+        .item-card.syncing {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .btn-action {
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+
+        .modal-header {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary-color), #224abe);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--secondary-color);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            background: linear-gradient(135deg, var(--info-color), #2c9faf);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .activity-log {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .activity-item {
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            background: white;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-container animate-fade-in">
+            <!-- Header -->
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h1 class="header-title">
+                        <i class="bi bi-cart-check"></i> Lista de Compras Familiar
+                    </h1>
+                    <div id="syncStatus" class="sync-status offline">
+                        <i class="bi bi-wifi-off"></i> A conectar...
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="user-info">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <h5 class="mb-1"><i class="bi bi-person-circle"></i> Utilizador Atual</h5>
+                        <p class="mb-0" id="currentUserName">Carregando...</p>
+                    </div>
+                    <button class="btn btn-light btn-sm" onclick="changeUser()">
+                        <i class="bi bi-person-gear"></i> Alterar Utilizador
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="row mb-4">
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="stats-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Total de Itens</h6>
+                                <h3 class="mb-0" id="totalItems">0</h3>
+                            </div>
+                            <i class="bi bi-list-ul" style="font-size: 2rem; opacity: 0.5;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="stats-card" style="background: linear-gradient(135deg, var(--success-color), #17a673);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Comprados</h6>
+                                <h3 class="mb-0" id="completedItems">0</h3>
+                            </div>
+                            <i class="bi bi-check-circle" style="font-size: 2rem; opacity: 0.5;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="stats-card" style="background: linear-gradient(135deg, var(--warning-color), #dda20a);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Por Comprar</h6>
+                                <h3 class="mb-0" id="pendingItems">0</h3>
+                            </div>
+                            <i class="bi bi-clock" style="font-size: 2rem; opacity: 0.5;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Item Form -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Adicionar Novo Item</h5>
+                </div>
+                <div class="card-body">
+                    <form id="addItemForm">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="itemName" class="form-label">Nome do Produto</label>
+                                <input type="text" class="form-control" id="itemName" placeholder="Ex: Leite, Pão, Maçãs..." required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="itemCategory" class="form-label">Categoria</label>
+                                <select class="form-select" id="itemCategory" required>
+                                    <option value="">Selecionar...</option>
+                                    <option value="Frutas">🍎 Frutas</option>
+                                    <option value="Vegetais">🥬 Vegetais</option>
+                                    <option value="Laticínios">🥛 Laticínios</option>
+                                    <option value="Carnes">🥩 Carnes</option>
+                                    <option value="Padaria">🍞 Padaria</option>
+                                    <option value="Bebidas">🥤 Bebidas</option>
+                                    <option value="Congelados">❄️ Congelados</option>
+                                    <option value="Limpeza">🧹 Limpeza</option>
+                                    <option value="Higiene">🧴 Higiene</option>
+                                    <option value="Outros">📦 Outros</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="itemQuantity" class="form-label">Quantidade</label>
+                                <input type="number" class="form-control" id="itemQuantity" min="1" value="1" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="itemUnit" class="form-label">Unidade</label>
+                                <select class="form-select" id="itemUnit">
+                                    <option value="un">un</option>
+                                    <option value="kg">kg</option>
+                                    <option value="lt">lt</option>
+                                    <option value="cx">cx</option>
+                                    <option value="pct">pct</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="btn btn-outline-primary active" onclick="filterItems('all')">
+                    <i class="bi bi-list"></i> Todos
+                </button>
+                <button class="btn btn-outline-success" onclick="filterItems('pending')">
+                    <i class="bi bi-clock"></i> Por Comprar
+                </button>
+                <button class="btn btn-outline-info" onclick="filterItems('completed')">
+                    <i class="bi bi-check-circle"></i> Comprados
+                </button>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Filtrar por Categoria:</label>
+                <div id="categoryFilters" class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-secondary category-badge" onclick="filterByCategory('all')">Todas</span>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">A carregar...</span>
+                </div>
+                <p class="mt-2">A sincronizar dados...</p>
+            </div>
+
+            <!-- Shopping List -->
+            <div id="shoppingList">
+                <!-- Items will be dynamically inserted here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="bi bi-cart-x"></i>
+                <h4>A tua lista está vazia!</h4>
+                <p>Adiciona itens para começar a organizar as tuas compras.</p>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-4 d-flex justify-content-between flex-wrap gap-2">
+                <button class="btn btn-danger" onclick="clearCompleted()">
+                    <i class="bi bi-trash"></i> Limpar Comprados
+                </button>
+                <button class="btn btn-warning" onclick="clearAll()">
+                    <i class="bi bi-x-circle"></i> Limpar Tudo
+                </button>
+                <button class="btn btn-success" onclick="exportList()">
+                    <i class="bi bi-download"></i> Exportar Lista
+                </button>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="mt-4">
+                <h5><i class="bi bi-activity"></i> Atividade Recente</h5>
+                <div class="activity-log" id="activityLog">
+                    <p class="text-muted text-center">Sem atividade recente</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Editar Item</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editItemForm">
+                        <input type="hidden" id="editItemId">
+                        <div class="mb-3">
+                            <label for="editItemName" class="form-label">Nome do Produto</label>
+                            <input type="text" class="form-control" id="editItemName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemCategory" class="form-label">Categoria</label>
+                            <select class="form-select" id="editItemCategory" required>
+                                <option value="Frutas">🍎 Frutas</option>
+                                <option value="Vegetais">🥬 Vegetais</option>
+                                <option value="Laticínios">🥛 Laticínios</option>
+                                <option value="Carnes">🥩 Carnes</option>
+                                <option value="Padaria">🍞 Padaria</option>
+                                <option value="Bebidas">🥤 Bebidas</option>
+                                <option value="Congelados">❄️ Congelados</option>
+                                <option value="Limpeza">🧹 Limpeza</option>
+                                <option value="Higiene">🧴 Higiene</option>
+                                <option value="Outros">📦 Outros</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="editItemQuantity" class="form-label">Quantidade</label>
+                                <input type="number" class="form-control" id="editItemQuantity" min="1" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="editItemUnit" class="form-label">Unidade</label>
+                                <select class="form-select" id="editItemUnit">
+                                    <option value="un">un</option>
+                                    <option value="kg">kg</option>
+                                    <option value="lt">lt</option>
+                                    <option value="cx">cx</option>
+                                    <option value="pct">pct</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEdit()">Guardar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change User Modal -->
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-person"></i> Identificação</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">O teu nome</label>
+                            <input type="text" class="form-control" id="userName" placeholder="Ex: João, Maria..." required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="saveUser()">Entrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // ==========================================
+        // CONFIGURAÇÃO DO FIREBASE
+        // ==========================================
+        // const firebaseConfig = {
+  apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
+  authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
+  databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "lista-compras-familiar-d7a36",
+  storageBucket: "lista-compras-familiar-d7a36.firebasestorage.app",
+  messagingSenderId: "32405618087",
+  appId: "1:32405618087:web:eebf45b54be249534e8a82"
+};
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ==========================================
+        // VARIÁVEIS GLOBAIS
+        // ==========================================
+        let shoppingItems = [];
+        let currentFilter = 'all';
+        let currentCategoryFilter = 'all';
+        let currentUser = localStorage.getItem('currentUser') || '';
+        let unsubscribeListener = null;
+        let activityLogs = [];
+
+        // Category colors mapping
+        const categoryColors = {
+            'Frutas': '#ff6b6b',
+            'Vegetais': '#51cf66',
+            'Laticínios': '#ffd43b',
+            'Carnes': '#ff922b',
+            'Padaria': '#fcc419',
+            'Bebidas': '#339af0',
+            'Congelados': '#22b8cf',
+            'Limpeza': '#845ef7',
+            'Higiene': '#f06595',
+            'Outros': '#868e96'
+        };
+
+        const categoryEmojis = {
+            'Frutas': '🍎',
+            'Vegetais': '🥬',
+            'Laticínios': '🥛',
+            'Carnes': '🥩',
+            'Padaria': '🍞',
+            'Bebidas': '🥤',
+            'Congelados': '❄️',
+            'Limpeza': '🧹',
+            'Higiene': '🧴',
+            'Outros': '📦'
+        };
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            checkUser();
+            setupRealtimeListener();
+            renderItems();
+            updateStats();
+            renderCategoryFilters();
+        });
+
+        // ==========================================
+        // GESTÃO DE UTILIZADORES
+        // ==========================================
+        function checkUser() {
+            if (!currentUser) {
+                const modal = new bootstrap.Modal(document.getElementById('userModal'));
+                modal.show();
+            } else {
+                document.getElementById('currentUserName').textContent = currentUser;
+            }
+        }
+
+        function changeUser() {
+            const modal = new bootstrap.Modal(document.getElementById('userModal'));
+            document.getElementById('userName').value = currentUser;
+            modal.show();
+        }
+
+        function saveUser() {
+            const name = document.getElementById('userName').value.trim();
+            if (name) {
+                currentUser = name;
+                localStorage.setItem('currentUser', currentUser);
+                document.getElementById('currentUserName').textContent = currentUser;
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+                modal.hide();
+                
+                showNotification(`Bem-vindo, ${currentUser}!`, 'success');
+            }
+        }
+
+        // ==========================================
+        // SINCRONIZAÇÃO EM TEMPO REAL COM FIREBASE
+        // ==========================================
+        function setupRealtimeListener() {
+            updateSyncStatus('connecting');
+            
+            // Listener em tempo real para items
+            unsubscribeListener = db.collection('shoppingList')
+                .orderBy('createdAt', 'desc')
+                .onSnapshot((snapshot) => {
+                    shoppingItems = [];
+                    snapshot.forEach((doc) => {
+                        shoppingItems.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    
+                    renderItems();
+                    updateStats();
+                    renderCategoryFilters();
+                    updateSyncStatus('online');
+                    
+                    console.log('Dados sincronizados:', shoppingItems.length, 'items');
+                }, (error) => {
+                    console.error('Erro na sincronização:', error);
+                    updateSyncStatus('offline');
+                    showNotification('Erro de conexão. Tenta novamente.', 'danger');
+                });
+
+            // Listener para logs de atividade
+            db.collection('activityLog')
+                .orderBy('timestamp', 'desc')
+                .limit(20)
+                .onSnapshot((snapshot) => {
+                    activityLogs = [];
+                    snapshot.forEach((doc) => {
+                        activityLogs.push(doc.data());
+                    });
+                    renderActivityLog();
+                });
+        }
+
+        function updateSyncStatus(status) {
+            const statusEl = document.getElementById('syncStatus');
+            if (status === 'online') {
+                statusEl.className = 'sync-status online';
+                statusEl.innerHTML = '<i class="bi bi-wifi"></i> Sincronizado em tempo real';
+            } else if (status === 'offline') {
+                statusEl.className = 'sync-status offline';
+                statusEl.innerHTML = '<i class="bi bi-wifi-off"></i> Sem conexão';
+            } else {
+                statusEl.className = 'sync-status offline';
+                statusEl.innerHTML = '<i class="bi bi-hourglass-split"></i> A conectar...';
+            }
+        }
+
+        // ==========================================
+        // OPERAÇÕES CRUD COM FIREBASE
+        // ==========================================
+        
+        // Adicionar item
+        document.getElementById('addItemForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showNotification('Identifica-te primeiro!', 'warning');
+                checkUser();
+                return;
+            }
+            
+            try {
+                const newItem = {
+                    name: document.getElementById('itemName').value.trim(),
+                    category: document.getElementById('itemCategory').value,
+                    quantity: parseInt(document.getElementById('itemQuantity').value),
+                    unit: document.getElementById('itemUnit').value,
+                    completed: false,
+                    createdBy: currentUser,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                await db.collection('shoppingList').add(newItem);
+                
+                // Adicionar log de atividade
+                await addActivityLog(`${currentUser} adicionou "${newItem.name}"`);
+                
+                this.reset();
+                document.getElementById('itemQuantity').value = 1;
+                
+                showNotification('Item adicionado e sincronizado!', 'success');
+            } catch (error) {
+                console.error('Erro ao adicionar:', error);
+                showNotification('Erro ao adicionar item. Tenta novamente.', 'danger');
+            }
+        });
+
+        // Toggle complete
+        async function toggleComplete(id) {
+            if (!currentUser) {
+                showNotification('Identifica-te primeiro!', 'warning');
+                checkUser();
+                return;
+            }
+            
+            try {
+                const itemRef = db.collection('shoppingList').doc(id);
+                const item = shoppingItems.find(i => i.id === id);
+                
+                if (item) {
+                    await itemRef.update({
+                        completed: !item.completed,
+                        updatedBy: currentUser,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    
+                    const action = item.completed ? 'desmarcou' : 'marcou como comprado';
+                    await addActivityLog(`${currentUser} ${action} "${item.name}"`);
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar:', error);
+                showNotification('Erro ao atualizar item.', 'danger');
+            }
+        }
+
+        // Delete item
+        async function deleteItem(id) {
+            if (!currentUser) {
+                showNotification('Identifica-te primeiro!', 'warning');
+                checkUser();
+                return;
+            }
+            
+            if (confirm('Tens a certeza que queres eliminar este item?')) {
+                try {
+                    const item = shoppingItems.find(i => i.id === id);
+                    
+                    await db.collection('shoppingList').doc(id).delete();
+                    
+                    if (item) {
+                        await addActivityLog(`${currentUser} eliminou "${item.name}"`);
+                    }
+                    
+                    showNotification('Item eliminado!', 'danger');
+                } catch (error) {
+                    console.error('Erro ao eliminar:', error);
+                    showNotification('Erro ao eliminar item.', 'danger');
+                }
+            }
+        }
+
+        // Edit item
+        async function saveEdit() {
+            if (!currentUser) {
+                showNotification('Identifica-te primeiro!', 'warning');
+                checkUser();
+                return;
+            }
+            
+            try {
+                const id = document.getElementById('editItemId').value;
+                const oldItem = shoppingItems.find(i => i.id === id);
+                
+                const updates = {
+                    name: document.getElementById('editItemName').value.trim(),
+                    category: document.getElementById('editItemCategory').value,
+                    quantity: parseInt(document.getElementById('editItemQuantity').value),
+                    unit: document.getElementById('editItemUnit').value,
+                    updatedBy: currentUser,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                await db.collection('shoppingList').doc(id).update(updates);
+                
+                if (oldItem && oldItem.name !== updates.name) {
+                    await addActivityLog(`${currentUser} editou "${oldItem.name}" para "${updates.name}"`);
+                }
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+                modal.hide();
+                
+                showNotification('Item atualizado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Erro ao editar:', error);
+                showNotification('Erro ao atualizar item.', 'danger');
+            }
+        }
+
+        // Clear completed
+        async function clearCompleted() {
+            if (!currentUser) {
+                showNotification('Identifica-te primeiro!', 'warning');
+                checkUser();
+                return;
+            }
+            
+            const completedItems = shoppingItems.filter(i => i.completed);
+            
+            if (completedItems.length > 0) {
+                if (confirm(`Eliminar ${completedItems.length} itens comprados?`)) {
+                    try {
+                        const batch = db.batch();
+                        
+                        completedItems.forEach(item => {
+                            const ref = db.collection('shoppingList').doc(item.id);
+                            batch.delete(ref);
+                        });
+                        
+                        await batch.commit();
+                        
+                        await addActivityLog(`${currentUser} limpou ${completedItems.length} itens comprados`);
+                        
+                        showNotification('Itens comprados eliminados!', 'warning');
+                    } catch (error) {
+                        console.error('Erro ao limpar:', error);
+                        showNotification('Erro ao eliminar itens.', 'danger');
+                    }
+                }
+            } else {
+                showNotification('Não há itens comprados para eliminar.', 'info');
+            }
+        }
+
+        // Clear all
+        async function clearAll() {
+            if (!currentUser) {
+                showNotification('Identifica-te primeiro!', 'warning');
+                checkUser();
+                return;
+            }
+            
+            if (shoppingItems.length > 0) {
+                if (confirm('Tens a certeza que queres eliminar TODOS os itens?')) {
+                    try {
+                        const batch = db.batch();
+                        
+                        shoppingItems.forEach(item => {
+                            const ref = db.collection('shoppingList').doc(item.id);
+                            batch.delete(ref);
+                        });
+                        
+                        await batch.commit();
+                        
+                        await addActivityLog(`${currentUser} limpou toda a lista (${shoppingItems.length} itens)`);
+                        
+                        showNotification('Lista completamente limpa!', 'danger');
+                    } catch (error) {
+                        console.error('Erro ao limpar tudo:', error);
+                        showNotification('Erro ao eliminar itens.', 'danger');
+                    }
+                }
+            }
+        }
+
+        // ==========================================
+        // LOGS DE ATIVIDADE
+        // ==========================================
+        async function addActivityLog(message) {
+            try {
+                await db.collection('activityLog').add({
+                    message: message,
+                    user: currentUser,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (error) {
+                console.error('Erro ao adicionar log:', error);
+            }
+        }
+
+        function renderActivityLog() {
+            const container = document.getElementById('activityLog');
+            
+            if (activityLogs.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">Sem atividade recente</p>';
+                return;
+            }
+            
+            let html = '';
+            activityLogs.slice(0, 10).forEach(log => {
+                const time = log.timestamp ? new Date(log.timestamp.toDate()).toLocaleTimeString('pt-PT') : 'Agora';
+                html += `
+                    <div class="activity-item">
+                        <small class="text-muted">${time}</small><br>
+                        <strong>${log.message}</strong>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // ==========================================
+        // RENDERIZAÇÃO DA INTERFACE
+        // ==========================================
+        function renderItems() {
+            const container = document.getElementById('shoppingList');
+            const emptyState = document.getElementById('emptyState');
+            
+            // Filter items
+            let filteredItems = shoppingItems;
+            
+            if (currentFilter === 'pending') {
+                filteredItems = filteredItems.filter(item => !item.completed);
+            } else if (currentFilter === 'completed') {
+                filteredItems = filteredItems.filter(item => item.completed);
+            }
+            
+            if (currentCategoryFilter !== 'all') {
+                filteredItems = filteredItems.filter(item => item.category === currentCategoryFilter);
+            }
+
+            if (filteredItems.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            
+            // Group by category
+            const grouped = {};
+            filteredItems.forEach(item => {
+                if (!grouped[item.category]) {
+                    grouped[item.category] = [];
+                }
+                grouped[item.category].push(item);
+            });
+
+            let html = '';
+            Object.keys(grouped).sort().forEach(category => {
+                const color = categoryColors[category] || '#868e96';
+                const emoji = categoryEmojis[category] || '📦';
+                
+                html += `
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3" style="color: ${color};">
+                            ${emoji} ${category} (${grouped[category].length})
+                        </h6>
+                `;
+                
+                grouped[category].forEach(item => {
+                    const creatorInfo = item.createdBy ? `<br><small class="text-muted">Adicionado por: ${item.createdBy}</small>` : '';
+                    
+                    html += `
+                        <div class="item-card ${item.completed ? 'checked' : ''}" data-id="${item.id}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <input type="checkbox" 
+                                               class="form-check-input" 
+                                               ${item.completed ? 'checked' : ''} 
+                                               onchange="toggleComplete('${item.id}')">
+                                        <span class="item-name fw-bold">${item.name}</span>
+                                        <span class="badge" style="background-color: ${color}; color: white;">
+                                            ${item.quantity} ${item.unit}
+                                        </span>
+                                    </div>
+                                    ${creatorInfo}
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-action btn-outline-primary" 
+                                            onclick="openEditModal('${item.id}')" 
+                                            title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-action btn-outline-danger" 
+                                            onclick="deleteItem('${item.id}')" 
+                                            title="Eliminar">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function openEditModal(id) {
+            const item = shoppingItems.find(i => i.id === id);
+            if (item) {
+                document.getElementById('editItemId').value = item.id;
+                document.getElementById('editItemName').value = item.name;
+                document.getElementById('editItemCategory').value = item.category;
+                document.getElementById('editItemQuantity').value = item.quantity;
+                document.getElementById('editItemUnit').value = item.unit;
+                
+                const modal = new bootstrap.Modal(document.getElementById('editModal'));
+                modal.show();
+            }
+        }
+
+        function filterItems(filter) {
+            currentFilter = filter;
+            
+            document.querySelectorAll('.filter-buttons .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('button').classList.add('active');
+            
+            renderItems();
+        }
+
+        function filterByCategory(category) {
+            currentCategoryFilter = category;
+            renderItems();
+        }
+
+        function renderCategoryFilters() {
+            const categories = [...new Set(shoppingItems.map(item => item.category))];
+            const container = document.getElementById('categoryFilters');
+            
+            let html = '<span class="badge bg-secondary category-badge" onclick="filterByCategory(\'all\')">Todas</span>';
+            
+            categories.forEach(cat => {
+                const color = categoryColors[cat] || '#868e96';
+                const emoji = categoryEmojis[cat] || '📦';
+                html += `<span class="badge category-badge" 
+                             style="background-color: ${color}; color: white;" 
+                             onclick="filterByCategory('${cat}')">
+                            ${emoji} ${cat}
+                         </span>`;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function updateStats() {
+            const total = shoppingItems.length;
+            const completed = shoppingItems.filter(i => i.completed).length;
+            const pending = total - completed;
+            
+            document.getElementById('totalItems').textContent = total;
+            document.getElementById('completedItems').textContent = completed;
+            document.getElementById('pendingItems').textContent = pending;
+        }
+
+        function exportList() {
+            if (shoppingItems.length === 0) {
+                showNotification('A lista está vazia!', 'warning');
+                return;
+            }
+
+            let text = '🛒 LISTA DE COMPRAS FAMILIAR\n';
+            text += '═══════════════════════════════\n';
+            text += `Gerada em: ${new Date().toLocaleString('pt-PT')}\n\n`;
+            
+            const grouped = {};
+            shoppingItems.forEach(item => {
+                if (!grouped[item.category]) {
+                    grouped[item.category] = [];
+                }
+                grouped[item.category].push(item);
+            });
+
+            Object.keys(grouped).sort().forEach(category => {
+                const emoji = categoryEmojis[category] || '📦';
+                text += `${emoji} ${category}\n`;
+                text += '───────────────────────────────\n';
+                
+                grouped[category].forEach(item => {
+                    const status = item.completed ? '✓' : '○';
+                    const creator = item.createdBy ? ` (por: ${item.createdBy})` : '';
+                    text += `${status} ${item.name} - ${item.quantity} ${item.unit}${creator}\n`;
+                });
+                text += '\n';
+            });
+
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lista-compras-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('Lista exportada com sucesso!', 'success');
+        }
+
+        function showNotification(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show notification-toast`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (unsubscribeListener) {
+                unsubscribeListener();
+            }
+        });
+    </script>
+</body>
+</html>
