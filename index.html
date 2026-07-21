@@ -557,13 +557,7 @@
         // ==========================================
         // ⚠️ CONFIGURAÇÃO - SUBSTITUI PELOS TEUS DADOS!
         // ==========================================
-       // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
+  const firebaseConfig = {
   apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
   authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
   databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
@@ -573,13 +567,13 @@ const firebaseConfig = {
   appId: "1:32405618087:web:eebf45b54be249534e8a82"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+
         const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwXTj4bRdnjo93Th32cpoTaq2WD2Nzbv8LqendFj-6V5XzZAhqgAdZByxl0yasE0qf6Fg/exec';
 
         // Inicializar Firebase (SDK compat - sem import!)
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
 
         // ==========================================
         // VARIÁVEIS GLOBAIS
