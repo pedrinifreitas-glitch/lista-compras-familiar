@@ -909,6 +909,28 @@ const app = initializeApp(firebaseConfig);
             const modal = new bootstrap.Modal(document.getElementById('purchaseModal'));
             modal.show();
         }
+		/**
+ * Mostra aviso se tentar registar compra sem marcar primeiro
+ */
+function alertPurchaseNeeded(id) {
+    showNotification('⚠️ Marca primeiro o item como comprado (✓) para registar o preço!', 'warning');
+    
+    // Destacar visualmente o checkbox
+    const itemCard = document.querySelector(`[data-id="${id}"]`);
+    if (itemCard) {
+        const checkbox = itemCard.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            checkbox.style.transform = 'scale(1.5)';
+            checkbox.style.transition = 'transform 0.3s';
+            checkbox.style.boxShadow = '0 0 10px rgba(255, 193, 7, 0.8)';
+            
+            setTimeout(() => {
+                checkbox.style.transform = 'scale(1)';
+                checkbox.style.boxShadow = 'none';
+            }, 1500);
+        }
+    }
+}
 
         /**
          * Calcula o total automaticamente
@@ -975,83 +997,99 @@ const app = initializeApp(firebaseConfig);
         // ==========================================
         // RENDERIZAÇÃO DA LISTA
         // ==========================================
-        function renderItems() {
-            const container = document.getElementById('shoppingList');
-            const emptyState = document.getElementById('emptyState');
-            
-            let filteredItems = shoppingItems;
-            
-            if (currentFilter === 'pending') {
-                filteredItems = filteredItems.filter(item => !item.completed);
-            } else if (currentFilter === 'completed') {
-                filteredItems = filteredItems.filter(item => item.completed);
-            }
-            
-            if (currentCategoryFilter !== 'all') {
-                filteredItems = filteredItems.filter(item => item.category === currentCategoryFilter);
-            }
+       function renderItems() {
+    const container = document.getElementById('shoppingList');
+    const emptyState = document.getElementById('emptyState');
+    
+    let filteredItems = shoppingItems;
+    
+    if (currentFilter === 'pending') {
+        filteredItems = filteredItems.filter(item => !item.completed);
+    } else if (currentFilter === 'completed') {
+        filteredItems = filteredItems.filter(item => item.completed);
+    }
+    
+    if (currentCategoryFilter !== 'all') {
+        filteredItems = filteredItems.filter(item => item.category === currentCategoryFilter);
+    }
 
-            if (filteredItems.length === 0) {
-                container.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
-            }
+    if (filteredItems.length === 0) {
+        container.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+    }
 
-            emptyState.style.display = 'none';
+    emptyState.style.display = 'none';
+    
+    const grouped = {};
+    filteredItems.forEach(item => {
+        if (!grouped[item.category]) {
+            grouped[item.category] = [];
+        }
+        grouped[item.category].push(item);
+    });
+
+    let html = '';
+    Object.keys(grouped).sort().forEach(category => {
+        const color = categoryColors[category] || '#868e96';
+        const emoji = categoryEmojis[category] || '📦';
+        
+        html += `<div class="mb-4"><h6 class="fw-bold mb-3" style="color: ${color};">${emoji} ${category} (${grouped[category].length})</h6>`;
+        
+        grouped[category].forEach(item => {
+            const creatorInfo = item.createdBy ? `<br><small class="text-muted">Por: ${item.createdBy}</small>` : '';
+            const isCompleted = item.completed;
             
-            const grouped = {};
-            filteredItems.forEach(item => {
-                if (!grouped[item.category]) {
-                    grouped[item.category] = [];
-                }
-                grouped[item.category].push(item);
-            });
-
-            let html = '';
-            Object.keys(grouped).sort().forEach(category => {
-                const color = categoryColors[category] || '#868e96';
-                const emoji = categoryEmojis[category] || '📦';
-                
-                html += `<div class="mb-4"><h6 class="fw-bold mb-3" style="color: ${color};">${emoji} ${category} (${grouped[category].length})</h6>`;
-                
-                grouped[category].forEach(item => {
-                    const creatorInfo = item.createdBy ? `<br><small class="text-muted">Por: ${item.createdBy}</small>` : '';
-                    const isCompleted = item.completed;
-                    
-                    html += `
-                        <div class="item-card ${isCompleted ? 'checked' : ''}" data-id="${item.id}">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <input type="checkbox" class="form-check-input" ${isCompleted ? 'checked' : ''} onchange="toggleComplete('${item.id}')">
-                                        <span class="item-name fw-bold">${item.name}</span>
-                                        <span class="badge" style="background-color: ${color}; color: white;">${item.quantity} ${item.unit}</span>
-                                    </div>
-                                    ${creatorInfo}
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-action btn-outline-primary" onclick="openEditModal('${item.id}')" title="Editar">
-                                        <i class="bi bi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-action btn-outline-success" 
-                                            onclick="openPurchaseModal('${item.id}')" 
-                                            title="Registar Compra"
-                                            ${!isCompleted ? 'disabled style="opacity: 0.3"' : ''}>
-                                        <i class="bi bi-cash-coin"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-action btn-outline-danger" onclick="deleteItem('${item.id}')" title="Eliminar">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </div>
+            // ✅ BOTÃO DE REGISTO DE COMPRA - SEMPRE VISÍVEL
+            // Se não estiver comprado, mostra aviso; se estiver, abre o formulário
+            const purchaseButtonAction = isCompleted 
+                ? `openPurchaseModal('${item.id}')` 
+                : `alertPurchaseNeeded('${item.id}')`;
+            
+            const purchaseButtonStyle = isCompleted 
+                ? '' 
+                : 'opacity: 0.6; border-style: dashed;';
+            
+            const purchaseButtonTitle = isCompleted 
+                ? 'Registar Preço e Local' 
+                : 'Clica primeiro no ✓ para marcar como comprado';
+            
+            html += `
+                <div class="item-card ${isCompleted ? 'checked' : ''}" data-id="${item.id}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <input type="checkbox" class="form-check-input" ${isCompleted ? 'checked' : ''} onchange="toggleComplete('${item.id}')">
+                                <span class="item-name fw-bold">${item.name}</span>
+                                <span class="badge" style="background-color: ${color}; color: white;">${item.quantity} ${item.unit}</span>
+                                ${isCompleted ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Comprado</span>' : ''}
                             </div>
+                            ${creatorInfo}
                         </div>
-                    `;
-                });
-                
-                html += '</div>';
-            });
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-sm btn-action btn-outline-primary" onclick="openEditModal('${item.id}')" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-action btn-outline-success" 
+                                    onclick="${purchaseButtonAction}" 
+                                    title="${purchaseButtonTitle}"
+                                    style="${purchaseButtonStyle}">
+                                <i class="bi bi-cash-coin"></i>
+                            </button>
+                            <button class="btn btn-sm btn-action btn-outline-danger" onclick="deleteItem('${item.id}')" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+    });
 
-            container.innerHTML = html;
+    container.innerHTML = html;
+
         }
 
         function filterItems(filter) {
