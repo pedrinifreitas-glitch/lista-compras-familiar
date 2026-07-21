@@ -146,99 +146,129 @@
         /* ============================================ */
         /* ESTILOS DO AUTOCOMPLETE DE HISTÓRICO         */
         /* ============================================ */
-        .history-suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 1000;
-            margin-top: 5px;
-            display: none;
-        }
+        /* ============================================ */
+/* ESTILOS DO AUTOCOMPLETE DE HISTÓRICO         */
+/* ============================================ */
+.history-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 5px;
+    display: none;
+}
 
-        .history-suggestions.active { display: block; }
+.history-suggestions.active { display: block; }
 
-        .history-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+.history-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
 
-        .history-item:hover { background: #f8f9fa; }
+.history-item:hover { background: #f8f9fa; }
+.history-item:last-child { border-bottom: none; }
 
-        .history-item:last-child { border-bottom: none; }
+.history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
 
-        .history-item-name {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
+.history-item-name {
+    font-weight: 600;
+    color: #333;
+}
 
-        .history-item-details {
-            display: flex;
-            gap: 15px;
-            font-size: 0.85rem;
-            flex-wrap: wrap;
-        }
+.history-best-price {
+    font-weight: bold;
+    color: var(--success-color);
+    font-size: 1rem;
+}
 
-        .history-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
+.history-item-details {
+    display: flex;
+    gap: 8px;
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
 
-        .history-badge.price {
-            background: #d4edda;
-            color: #155724;
-        }
+.history-savings {
+    font-size: 0.75rem;
+    color: #856404;
+    background: #fff3cd;
+    padding: 3px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 4px;
+}
 
-        .history-badge.store {
-            background: #fff3cd;
-            color: #856404;
-        }
+.history-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
 
-        .history-badge.date {
-            background: #e2e3e5;
-            color: #383d41;
-        }
+.history-badge.price-best {
+    background: #d4edda;
+    color: #155724;
+    font-weight: 600;
+}
 
-        .history-loading {
-            padding: 15px;
-            text-align: center;
-            color: var(--secondary-color);
-        }
+.history-badge.price-avg {
+    background: #e2e3e5;
+    color: #383d41;
+}
 
-        .history-empty {
-            padding: 15px;
-            text-align: center;
-            color: var(--secondary-color);
-            font-style: italic;
-        }
+.history-badge.store {
+    background: #fff3cd;
+    color: #856404;
+}
 
-        .product-input-wrapper {
-            position: relative;
-        }
+.history-badge.count {
+    background: #d1ecf1;
+    color: #0c5460;
+}
 
-        .history-indicator {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--info-color);
-            font-size: 0.8rem;
-            pointer-events: none;
-        }
+.history-loading {
+    padding: 15px;
+    text-align: center;
+    color: var(--secondary-color);
+}
 
+.history-empty {
+    padding: 15px;
+    text-align: center;
+    color: var(--secondary-color);
+    font-style: italic;
+}
+
+.product-input-wrapper {
+    position: relative;
+}
+
+.history-indicator {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--info-color);
+    font-size: 0.8rem;
+    pointer-events: none;
+}
         @media (max-width: 768px) {
             .main-container { padding: 20px; margin-top: 15px; margin-bottom: 15px; }
         }
@@ -708,76 +738,109 @@
          * Mostra sugestões do histórico
          */
         function showHistorySuggestions(suggestions) {
-            const container = document.getElementById('historySuggestions');
-            const indicator = document.getElementById('historyIndicator');
-            
-            if (suggestions.length === 0) {
-                container.classList.remove('active');
-                indicator.style.display = 'none';
-                return;
-            }
-            
-            indicator.style.display = 'block';
-            
-            let html = '';
-            suggestions.forEach(item => {
-                const lastDate = item.lastDate ? formatDate(item.lastDate) : 'Sem data';
-                const priceDisplay = item.lastUnitPrice > 0 
-                    ? `${item.lastUnitPrice.toFixed(2)}€/${item.unit}` 
-                    : 'Sem preço';
-                
-                html += `
-                    <div class="history-item" onclick='selectHistoryItem(${JSON.stringify(item).replace(/'/g, "&apos;")})'>
-                        <div class="history-item-name">${item.productName}</div>
-                        <div class="history-item-details">
-                            <span class="history-badge price">
-                                <i class="bi bi-tag"></i> ${priceDisplay}
-                            </span>
-                            ${item.lastStore ? `
-                                <span class="history-badge store">
-                                    <i class="bi bi-shop"></i> ${item.lastStore}
-                                </span>
-                            ` : ''}
-                            <span class="history-badge date">
-                                <i class="bi bi-calendar"></i> ${lastDate}
-                            </span>
-                        </div>
+    const container = document.getElementById('historySuggestions');
+    const indicator = document.getElementById('historyIndicator');
+    
+    if (suggestions.length === 0) {
+        container.classList.remove('active');
+        indicator.style.display = 'none';
+        return;
+    }
+    
+    indicator.style.display = 'block';
+    
+    let html = '';
+    suggestions.forEach(item => {
+        // Formatar melhor preço
+        const bestPriceDisplay = item.bestPrice > 0 
+            ? `${item.bestPrice.toFixed(2)}€/${item.unit}` 
+            : 'Sem preço';
+        
+        // Preço médio (se disponível)
+        const avgPriceDisplay = item.avgPrice > 0 
+            ? `Média: ${item.avgPrice.toFixed(2)}€` 
+            : '';
+        
+        // Informação de poupança
+        let savingsInfo = '';
+        if (item.savings > 0 && item.savingsPercent > 0) {
+            savingsInfo = `
+                <div class="history-savings">
+                    💡 Poupas até <strong>${item.savings.toFixed(2)}€</strong> 
+                    (${item.savingsPercent.toFixed(0)}%) comprando no <strong>${item.bestPriceStore || 'local certo'}</strong>
+                </div>
+            `;
+        }
+        
+        // Contagem de compras
+        const purchaseCount = item.totalPurchases > 1 
+            ? `<span class="history-badge count"><i class="bi bi-bag-check"></i> ${item.totalPurchases}x comprado</span>`
+            : '';
+        
+        html += `
+            <div class="history-item" onclick='selectHistoryItem(${JSON.stringify(item).replace(/'/g, "&apos;")})'>
+                <div class="history-item-header">
+                    <div class="history-item-name">${item.productName}</div>
+                    <div class="history-best-price">
+                        <i class="bi bi-trophy"></i> ${bestPriceDisplay}
                     </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            container.classList.add('active');
+                </div>
+                <div class="history-item-details">
+                    <span class="history-badge price-best">
+                        <i class="bi bi-star-fill"></i> Melhor: ${item.bestPriceStore || 'N/D'}
+                    </span>
+                    ${avgPriceDisplay ? `
+                        <span class="history-badge price-avg">
+                            <i class="bi bi-graph-up"></i> ${avgPriceDisplay}
+                        </span>
+                    ` : ''}
+                    ${purchaseCount}
+                </div>
+                ${savingsInfo}
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+    container.classList.add('active');
         }
         
         /**
          * Seleciona um item do histórico e preenche o formulário
          */
-        function selectHistoryItem(item) {
-            document.getElementById('itemName').value = item.productName;
-            
-            // Preencher categoria se existir
-            if (item.category) {
-                const categorySelect = document.getElementById('itemCategory');
-                for (let option of categorySelect.options) {
-                    if (option.value === item.category) {
-                        categorySelect.value = item.category;
-                        break;
-                    }
-                }
+       function selectHistoryItem(item) {
+    document.getElementById('itemName').value = item.productName;
+    
+    // Preencher categoria se existir
+    if (item.category) {
+        const categorySelect = document.getElementById('itemCategory');
+        for (let option of categorySelect.options) {
+            if (option.value === item.category) {
+                categorySelect.value = item.category;
+                break;
             }
-            
-            // Preencher unidade
-            if (item.unit) {
-                document.getElementById('itemUnit').value = item.unit;
-            }
-            
-            // Fechar sugestões
-            document.getElementById('historySuggestions').classList.remove('active');
-            document.getElementById('historyIndicator').style.display = 'none';
-            
-            showNotification(`📋 Dados de "${item.productName}" preenchidos do histórico!`, 'info');
         }
+    }
+    
+    // Preencher unidade
+    if (item.unit) {
+        document.getElementById('itemUnit').value = item.unit;
+    }
+    
+    // Fechar sugestões
+    document.getElementById('historySuggestions').classList.remove('active');
+    document.getElementById('historyIndicator').style.display = 'none';
+    
+    // Mostrar notificação com o melhor preço
+    if (item.bestPrice > 0 && item.bestPriceStore) {
+        showNotification(
+            `🏆 Melhor preço: ${item.bestPrice.toFixed(2)}€ no ${item.bestPriceStore}`,
+            'info'
+        );
+    } else {
+        showNotification(`📋 Dados de "${item.productName}" preenchidos!`, 'info');
+    }
+}
         
         /**
          * Formata data para exibição
@@ -822,22 +885,23 @@
         }
         
         /**
-         * Handler do focus no input
+       
          */
-        function handleProductNameFocus() {
-            // Se já há cache, mostrar sugestões recentes (últimos 5 produtos)
-            if (priceHistoryCache.length > 0) {
-                const recent = priceHistoryCache
-                    .filter(item => item.lastDate)
-                    .sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate))
-                    .slice(0, 5);
-                
-                if (recent.length > 0) {
-                    showHistorySuggestions(recent);
-                }
-            } else {
-                // Carregar histórico se ainda não estiver em cache
-                loadPriceHistory().then(() => {
+		 Handler do focus no input - mostra produtos mais comprados recentemente
+ */
+function handleProductNameFocus() {
+    if (priceHistoryCache.length > 0) {
+        // Ordenar por número de compras (mais populares primeiro)
+        const popular = [...priceHistoryCache]
+            .sort((a, b) => b.totalPurchases - a.totalPurchases)
+            .slice(0, 5);
+        
+        if (popular.length > 0) {
+            showHistorySuggestions(popular);
+        }
+    } else {
+        loadPriceHistory().then(() => 
+         {
                     if (priceHistoryCache.length > 0) {
                         const recent = priceHistoryCache
                             .filter(item => item.lastDate)
