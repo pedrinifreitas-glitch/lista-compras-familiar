@@ -5,12 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Compras Familiar - Sincronizada</title>
     
-    <!-- FAVICON (resolve o erro 404) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
     
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <style>
@@ -53,15 +50,8 @@
             font-size: 0.9rem;
         }
 
-        .sync-status.online {
-            background: rgba(28, 200, 138, 0.1);
-            color: var(--success-color);
-        }
-
-        .sync-status.offline {
-            background: rgba(231, 74, 59, 0.1);
-            color: var(--danger-color);
-        }
+        .sync-status.online { background: rgba(28, 200, 138, 0.1); color: var(--success-color); }
+        .sync-status.offline { background: rgba(231, 74, 59, 0.1); color: var(--danger-color); }
 
         .category-badge {
             font-size: 0.85rem;
@@ -85,7 +75,6 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border-left: 4px solid var(--primary-color);
-            position: relative;
         }
 
         .item-card:hover {
@@ -93,15 +82,8 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .item-card.checked {
-            opacity: 0.6;
-            background: #f8f9fa;
-        }
-
-        .item-card.checked .item-name {
-            text-decoration: line-through;
-            color: var(--secondary-color);
-        }
+        .item-card.checked { opacity: 0.6; background: #f8f9fa; }
+        .item-card.checked .item-name { text-decoration: line-through; color: var(--secondary-color); }
 
         .btn-action {
             width: 35px;
@@ -114,10 +96,7 @@
             margin-left: 5px;
         }
 
-        .modal-header {
-            background: var(--primary-color);
-            color: white;
-        }
+        .modal-header { background: var(--primary-color); color: white; }
 
         .stats-card {
             background: linear-gradient(135deg, var(--primary-color), #224abe);
@@ -128,28 +107,12 @@
             transition: transform 0.3s ease;
         }
 
-        .stats-card:hover {
-            transform: translateY(-5px);
-        }
+        .stats-card:hover { transform: translateY(-5px); }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--secondary-color);
-        }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--secondary-color); }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; }
 
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
+        .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
 
         .user-info {
             background: linear-gradient(135deg, var(--info-color), #2c9faf);
@@ -177,27 +140,110 @@
             margin-top: 10px;
         }
 
-        .sending-indicator {
+        .sending-indicator { display: none; text-align: center; padding: 20px; }
+        .sending-indicator.active { display: block; }
+
+        /* ============================================ */
+        /* ESTILOS DO AUTOCOMPLETE DE HISTÓRICO         */
+        /* ============================================ */
+        .history-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: 5px;
             display: none;
-            text-align: center;
-            padding: 20px;
         }
 
-        .sending-indicator.active {
-            display: block;
+        .history-suggestions.active { display: block; }
+
+        .history-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-item:hover { background: #f8f9fa; }
+
+        .history-item:last-child { border-bottom: none; }
+
+        .history-item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .history-item-details {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .history-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .history-badge.price {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .history-badge.store {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .history-badge.date {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .history-loading {
+            padding: 15px;
+            text-align: center;
+            color: var(--secondary-color);
+        }
+
+        .history-empty {
+            padding: 15px;
+            text-align: center;
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .product-input-wrapper {
+            position: relative;
+        }
+
+        .history-indicator {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--info-color);
+            font-size: 0.8rem;
+            pointer-events: none;
         }
 
         @media (max-width: 768px) {
-            .main-container {
-                padding: 20px;
-                margin-top: 15px;
-                margin-bottom: 15px;
-            }
+            .main-container { padding: 20px; margin-top: 15px; margin-bottom: 15px; }
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-in; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -216,7 +262,6 @@
 <body>
     <div class="container">
         <div class="main-container animate-fade-in">
-            <!-- Header -->
             <div class="row mb-3">
                 <div class="col-12">
                     <h1 class="header-title">
@@ -228,7 +273,6 @@
                 </div>
             </div>
 
-            <!-- User Info -->
             <div class="user-info">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <div>
@@ -241,7 +285,6 @@
                 </div>
             </div>
 
-            <!-- Stats -->
             <div class="row mb-4">
                 <div class="col-md-4 col-sm-6 mb-3">
                     <div class="stats-card">
@@ -288,7 +331,18 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label for="itemName" class="form-label">Nome do Produto</label>
-                                <input type="text" class="form-control" id="itemName" placeholder="Ex: Leite, Pão, Maçãs..." required>
+                                <div class="product-input-wrapper">
+                                    <input type="text" class="form-control" id="itemName" 
+                                           placeholder="Ex: Leite, Pão, Maçãs..." required
+                                           autocomplete="off"
+                                           oninput="handleProductNameInput()"
+                                           onfocus="handleProductNameFocus()">
+                                    <span class="history-indicator" id="historyIndicator" style="display: none;">
+                                        <i class="bi bi-clock-history"></i>
+                                    </span>
+                                </div>
+                                <!-- Dropdown de sugestões do histórico -->
+                                <div class="history-suggestions" id="historySuggestions"></div>
                             </div>
                             <div class="col-md-3">
                                 <label for="itemCategory" class="form-label">Categoria</label>
@@ -330,7 +384,6 @@
                 </div>
             </div>
 
-            <!-- Filter Buttons -->
             <div class="filter-buttons">
                 <button class="btn btn-outline-primary active" onclick="filterItems('all')">
                     <i class="bi bi-list"></i> Todos
@@ -343,7 +396,6 @@
                 </button>
             </div>
 
-            <!-- Category Filter -->
             <div class="mb-3">
                 <label class="form-label fw-bold">Filtrar por Categoria:</label>
                 <div id="categoryFilters" class="d-flex flex-wrap gap-2">
@@ -351,17 +403,14 @@
                 </div>
             </div>
 
-            <!-- Shopping List -->
             <div id="shoppingList"></div>
 
-            <!-- Empty State -->
             <div id="emptyState" class="empty-state" style="display: none;">
                 <i class="bi bi-cart-x"></i>
                 <h4>A tua lista está vazia!</h4>
                 <p>Adiciona itens para começar a organizar as tuas compras.</p>
             </div>
 
-            <!-- Actions -->
             <div class="mt-4 d-flex justify-content-between flex-wrap gap-2">
                 <button class="btn btn-danger" onclick="clearCompleted()">
                     <i class="bi bi-trash"></i> Limpar Comprados
@@ -478,17 +527,13 @@
                         <div class="price-input-group">
                             <div class="row g-3">
                                 <div class="col-6">
-                                    <label for="purchaseUnitPrice" class="form-label">
-                                        Preço Unitário (€)
-                                    </label>
+                                    <label for="purchaseUnitPrice" class="form-label">Preço Unitário (€)</label>
                                     <input type="number" class="form-control" id="purchaseUnitPrice" 
                                            step="0.01" min="0" placeholder="0.00" required 
                                            oninput="calculateTotal()">
                                 </div>
                                 <div class="col-6">
-                                    <label for="purchaseQuantity" class="form-label">
-                                        Quantidade
-                                    </label>
+                                    <label for="purchaseQuantity" class="form-label">Quantidade</label>
                                     <input type="number" class="form-control" id="purchaseQuantity" 
                                            min="0.01" step="0.01" placeholder="1" required
                                            oninput="calculateTotal()">
@@ -535,9 +580,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cancelar
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" onclick="submitPurchase()">
                         <i class="bi bi-check-circle"></i> Registar Compra
                     </button>
@@ -546,18 +589,15 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Firebase SDK (VERSÃO COMPAT - NÃO USA IMPORT) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <script>
         // ==========================================
-        // ⚠️ CONFIGURAÇÃO - SUBSTITUI PELOS TEUS DADOS!
+        // CONFIGURAÇÕES - SUBSTITUI PELOS TEUS DADOS!
         // ==========================================
-  const firebaseConfig = {
+       const firebaseConfig = {
   apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
   authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
   databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
@@ -567,13 +607,10 @@
   appId: "1:32405618087:web:eebf45b54be249534e8a82"
 };
 
-
         const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwXTj4bRdnjo93Th32cpoTaq2WD2Nzbv8LqendFj-6V5XzZAhqgAdZByxl0yasE0qf6Fg/exec';
 
-        // Inicializar Firebase (SDK compat - sem import!)
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-
 
         // ==========================================
         // VARIÁVEIS GLOBAIS
@@ -583,31 +620,23 @@
         let currentCategoryFilter = 'all';
         let currentUser = localStorage.getItem('currentUser') || '';
         let unsubscribeListener = null;
+        
+        // ✅ NOVO: Cache do histórico de preços
+        let priceHistoryCache = [];
+        let historyCacheTimestamp = 0;
+        const HISTORY_CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
         const categoryColors = {
-            'Frutas': '#ff6b6b',
-            'Vegetais': '#51cf66',
-            'Laticínios': '#ffd43b',
-            'Carnes': '#ff922b',
-            'Padaria': '#fcc419',
-            'Bebidas': '#339af0',
-            'Congelados': '#22b8cf',
-            'Limpeza': '#845ef7',
-            'Higiene': '#f06595',
+            'Frutas': '#ff6b6b', 'Vegetais': '#51cf66', 'Laticínios': '#ffd43b',
+            'Carnes': '#ff922b', 'Padaria': '#fcc419', 'Bebidas': '#339af0',
+            'Congelados': '#22b8cf', 'Limpeza': '#845ef7', 'Higiene': '#f06595',
             'Outros': '#868e96'
         };
 
         const categoryEmojis = {
-            'Frutas': '🍎',
-            'Vegetais': '🥬',
-            'Laticínios': '🥛',
-            'Carnes': '🥩',
-            'Padaria': '🍞',
-            'Bebidas': '🥤',
-            'Congelados': '❄️',
-            'Limpeza': '🧹',
-            'Higiene': '🧴',
-            'Outros': '📦'
+            'Frutas': '🍎', 'Vegetais': '🥬', 'Laticínios': '🥛', 'Carnes': '🥩',
+            'Padaria': '🍞', 'Bebidas': '🥤', 'Congelados': '❄️', 'Limpeza': '🧹',
+            'Higiene': '🧴', 'Outros': '📦'
         };
 
         // ==========================================
@@ -619,8 +648,210 @@
             renderItems();
             updateStats();
             renderCategoryFilters();
+            loadPriceHistory(); // ✅ Carregar histórico ao iniciar
+            
+            // Fechar sugestões ao clicar fora
+            document.addEventListener('click', function(e) {
+                const input = document.getElementById('itemName');
+                const suggestions = document.getElementById('historySuggestions');
+                if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+                    suggestions.classList.remove('active');
+                }
+            });
         });
 
+        // ==========================================
+        // ✅ NOVO: FUNÇÕES DE HISTÓRICO DE PREÇOS
+        // ==========================================
+        
+        /**
+         * Carrega o histórico de preços do Google Sheets
+         */
+        async function loadPriceHistory(forceRefresh = false) {
+            const now = Date.now();
+            
+            // Usar cache se ainda válido
+            if (!forceRefresh && priceHistoryCache.length > 0 && 
+                (now - historyCacheTimestamp) < HISTORY_CACHE_DURATION) {
+                return priceHistoryCache;
+            }
+            
+            try {
+                const response = await fetch(SHEETS_API_URL);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    priceHistoryCache = data.history || [];
+                    historyCacheTimestamp = now;
+                    console.log('Histórico carregado:', priceHistoryCache.length, 'produtos');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+            }
+            
+            return priceHistoryCache;
+        }
+        
+        /**
+         * Pesquisa produtos no histórico pelo nome
+         */
+        function searchHistory(query) {
+            if (!query || query.length < 2) return [];
+            
+            const queryLower = query.toLowerCase();
+            return priceHistoryCache.filter(item => 
+                item.productName.toLowerCase().includes(queryLower)
+            ).slice(0, 5); // Máximo 5 sugestões
+        }
+        
+        /**
+         * Mostra sugestões do histórico
+         */
+        function showHistorySuggestions(suggestions) {
+            const container = document.getElementById('historySuggestions');
+            const indicator = document.getElementById('historyIndicator');
+            
+            if (suggestions.length === 0) {
+                container.classList.remove('active');
+                indicator.style.display = 'none';
+                return;
+            }
+            
+            indicator.style.display = 'block';
+            
+            let html = '';
+            suggestions.forEach(item => {
+                const lastDate = item.lastDate ? formatDate(item.lastDate) : 'Sem data';
+                const priceDisplay = item.lastUnitPrice > 0 
+                    ? `${item.lastUnitPrice.toFixed(2)}€/${item.unit}` 
+                    : 'Sem preço';
+                
+                html += `
+                    <div class="history-item" onclick='selectHistoryItem(${JSON.stringify(item).replace(/'/g, "&apos;")})'>
+                        <div class="history-item-name">${item.productName}</div>
+                        <div class="history-item-details">
+                            <span class="history-badge price">
+                                <i class="bi bi-tag"></i> ${priceDisplay}
+                            </span>
+                            ${item.lastStore ? `
+                                <span class="history-badge store">
+                                    <i class="bi bi-shop"></i> ${item.lastStore}
+                                </span>
+                            ` : ''}
+                            <span class="history-badge date">
+                                <i class="bi bi-calendar"></i> ${lastDate}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            container.classList.add('active');
+        }
+        
+        /**
+         * Seleciona um item do histórico e preenche o formulário
+         */
+        function selectHistoryItem(item) {
+            document.getElementById('itemName').value = item.productName;
+            
+            // Preencher categoria se existir
+            if (item.category) {
+                const categorySelect = document.getElementById('itemCategory');
+                for (let option of categorySelect.options) {
+                    if (option.value === item.category) {
+                        categorySelect.value = item.category;
+                        break;
+                    }
+                }
+            }
+            
+            // Preencher unidade
+            if (item.unit) {
+                document.getElementById('itemUnit').value = item.unit;
+            }
+            
+            // Fechar sugestões
+            document.getElementById('historySuggestions').classList.remove('active');
+            document.getElementById('historyIndicator').style.display = 'none';
+            
+            showNotification(`📋 Dados de "${item.productName}" preenchidos do histórico!`, 'info');
+        }
+        
+        /**
+         * Formata data para exibição
+         */
+        function formatDate(dateString) {
+            if (!dateString) return 'Sem data';
+            try {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 0) return 'Hoje';
+                if (diffDays === 1) return 'Ontem';
+                if (diffDays < 7) return `Há ${diffDays} dias`;
+                if (diffDays < 30) return `Há ${Math.floor(diffDays / 7)} sem.`;
+                return date.toLocaleDateString('pt-PT');
+            } catch (e) {
+                return 'Sem data';
+            }
+        }
+        
+        /**
+         * Handler do input do nome do produto
+         */
+        let searchTimeout = null;
+        function handleProductNameInput() {
+            const query = document.getElementById('itemName').value.trim();
+            
+            clearTimeout(searchTimeout);
+            
+            if (query.length < 2) {
+                document.getElementById('historySuggestions').classList.remove('active');
+                document.getElementById('historyIndicator').style.display = 'none';
+                return;
+            }
+            
+            // Debounce: esperar 300ms antes de pesquisar
+            searchTimeout = setTimeout(() => {
+                const suggestions = searchHistory(query);
+                showHistorySuggestions(suggestions);
+            }, 300);
+        }
+        
+        /**
+         * Handler do focus no input
+         */
+        function handleProductNameFocus() {
+            // Se já há cache, mostrar sugestões recentes (últimos 5 produtos)
+            if (priceHistoryCache.length > 0) {
+                const recent = priceHistoryCache
+                    .filter(item => item.lastDate)
+                    .sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate))
+                    .slice(0, 5);
+                
+                if (recent.length > 0) {
+                    showHistorySuggestions(recent);
+                }
+            } else {
+                // Carregar histórico se ainda não estiver em cache
+                loadPriceHistory().then(() => {
+                    if (priceHistoryCache.length > 0) {
+                        const recent = priceHistoryCache
+                            .filter(item => item.lastDate)
+                            .sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate))
+                            .slice(0, 5);
+                        showHistorySuggestions(recent);
+                    }
+                });
+            }
+        }
+
+        // ==========================================
+        // FUNÇÕES DE UTILIZADOR
+        // ==========================================
         function checkUser() {
             if (!currentUser) {
                 const modal = new bootstrap.Modal(document.getElementById('userModal'));
@@ -642,14 +873,15 @@
                 currentUser = name;
                 localStorage.setItem('currentUser', currentUser);
                 document.getElementById('currentUserName').textContent = currentUser;
-                
                 const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
                 modal.hide();
-                
                 showNotification(`Bem-vindo, ${currentUser}!`, 'success');
             }
         }
 
+        // ==========================================
+        // FIREBASE - SINCRONIZAÇÃO
+        // ==========================================
         function setupRealtimeListener() {
             updateSyncStatus('connecting');
             
@@ -658,12 +890,8 @@
                 .onSnapshot((snapshot) => {
                     shoppingItems = [];
                     snapshot.forEach((doc) => {
-                        shoppingItems.push({
-                            id: doc.id,
-                            ...doc.data()
-                        });
+                        shoppingItems.push({ id: doc.id, ...doc.data() });
                     });
-                    
                     renderItems();
                     updateStats();
                     renderCategoryFilters();
@@ -671,7 +899,6 @@
                 }, (error) => {
                     console.error('Erro na sincronização:', error);
                     updateSyncStatus('offline');
-                    showNotification('Erro de conexão. Verifica as configurações do Firebase.', 'danger');
                 });
         }
 
@@ -717,21 +944,15 @@
                 showNotification('Item adicionado e sincronizado!', 'success');
             } catch (error) {
                 console.error('Erro ao adicionar:', error);
-                showNotification('Erro ao adicionar item. Verifica a conexão.', 'danger');
+                showNotification('Erro ao adicionar item.', 'danger');
             }
         });
 
         async function toggleComplete(id) {
-            if (!currentUser) {
-                showNotification('Identifica-te primeiro!', 'warning');
-                checkUser();
-                return;
-            }
-            
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
             try {
                 const itemRef = db.collection('shoppingList').doc(id);
                 const item = shoppingItems.find(i => i.id === id);
-                
                 if (item) {
                     await itemRef.update({
                         completed: !item.completed,
@@ -741,24 +962,17 @@
                 }
             } catch (error) {
                 console.error('Erro ao atualizar:', error);
-                showNotification('Erro ao atualizar item.', 'danger');
             }
         }
 
         async function deleteItem(id) {
-            if (!currentUser) {
-                showNotification('Identifica-te primeiro!', 'warning');
-                checkUser();
-                return;
-            }
-            
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
             if (confirm('Tens a certeza que queres eliminar este item?')) {
                 try {
                     await db.collection('shoppingList').doc(id).delete();
                     showNotification('Item eliminado!', 'danger');
                 } catch (error) {
                     console.error('Erro ao eliminar:', error);
-                    showNotification('Erro ao eliminar item.', 'danger');
                 }
             }
         }
@@ -771,22 +985,15 @@
                 document.getElementById('editItemCategory').value = item.category;
                 document.getElementById('editItemQuantity').value = item.quantity;
                 document.getElementById('editItemUnit').value = item.unit;
-                
                 const modal = new bootstrap.Modal(document.getElementById('editModal'));
                 modal.show();
             }
         }
 
         async function saveEdit() {
-            if (!currentUser) {
-                showNotification('Identifica-te primeiro!', 'warning');
-                checkUser();
-                return;
-            }
-            
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
             try {
                 const id = document.getElementById('editItemId').value;
-                
                 const updates = {
                     name: document.getElementById('editItemName').value.trim(),
                     category: document.getElementById('editItemCategory').value,
@@ -795,88 +1002,45 @@
                     updatedBy: currentUser,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-
                 await db.collection('shoppingList').doc(id).update(updates);
-                
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
                 modal.hide();
-                
-                showNotification('Item atualizado com sucesso!', 'success');
+                showNotification('Item atualizado!', 'success');
             } catch (error) {
                 console.error('Erro ao editar:', error);
-                showNotification('Erro ao atualizar item.', 'danger');
             }
         }
 
         async function clearCompleted() {
-            if (!currentUser) {
-                showNotification('Identifica-te primeiro!', 'warning');
-                checkUser();
-                return;
-            }
-            
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
             const completedItems = shoppingItems.filter(i => i.completed);
-            
-            if (completedItems.length > 0) {
-                if (confirm(`Eliminar ${completedItems.length} itens comprados?`)) {
-                    try {
-                        const batch = db.batch();
-                        
-                        completedItems.forEach(item => {
-                            const ref = db.collection('shoppingList').doc(item.id);
-                            batch.delete(ref);
-                        });
-                        
-                        await batch.commit();
-                        showNotification('Itens comprados eliminados!', 'warning');
-                    } catch (error) {
-                        console.error('Erro ao limpar:', error);
-                        showNotification('Erro ao eliminar itens.', 'danger');
-                    }
-                }
-            } else {
-                showNotification('Não há itens comprados para eliminar.', 'info');
+            if (completedItems.length > 0 && confirm(`Eliminar ${completedItems.length} itens comprados?`)) {
+                try {
+                    const batch = db.batch();
+                    completedItems.forEach(item => batch.delete(db.collection('shoppingList').doc(item.id)));
+                    await batch.commit();
+                    showNotification('Itens comprados eliminados!', 'warning');
+                } catch (error) { console.error('Erro:', error); }
             }
         }
 
         async function clearAll() {
-            if (!currentUser) {
-                showNotification('Identifica-te primeiro!', 'warning');
-                checkUser();
-                return;
-            }
-            
-            if (shoppingItems.length > 0) {
-                if (confirm('Tens a certeza que queres eliminar TODOS os itens?')) {
-                    try {
-                        const batch = db.batch();
-                        
-                        shoppingItems.forEach(item => {
-                            const ref = db.collection('shoppingList').doc(item.id);
-                            batch.delete(ref);
-                        });
-                        
-                        await batch.commit();
-                        showNotification('Lista completamente limpa!', 'danger');
-                    } catch (error) {
-                        console.error('Erro ao limpar tudo:', error);
-                        showNotification('Erro ao eliminar itens.', 'danger');
-                    }
-                }
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
+            if (shoppingItems.length > 0 && confirm('Eliminar TODOS os itens?')) {
+                try {
+                    const batch = db.batch();
+                    shoppingItems.forEach(item => batch.delete(db.collection('shoppingList').doc(item.id)));
+                    await batch.commit();
+                    showNotification('Lista limpa!', 'danger');
+                } catch (error) { console.error('Erro:', error); }
             }
         }
 
         // ==========================================
-        // FUNÇÕES DE REGISTO DE COMPRA
+        // REGISTO DE COMPRA
         // ==========================================
-        
         function openPurchaseModal(id) {
-            if (!currentUser) {
-                showNotification('Identifica-te primeiro!', 'warning');
-                checkUser();
-                return;
-            }
-            
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
             const item = shoppingItems.find(i => i.id === id);
             if (!item) return;
             
@@ -894,7 +1058,6 @@
 
         function alertPurchaseNeeded(id) {
             showNotification('⚠️ Marca primeiro o item como comprado (✓) para registar o preço!', 'warning');
-            
             const itemCard = document.querySelector(`[data-id="${id}"]`);
             if (itemCard) {
                 const checkbox = itemCard.querySelector('input[type="checkbox"]');
@@ -902,7 +1065,6 @@
                     checkbox.style.transform = 'scale(1.5)';
                     checkbox.style.transition = 'transform 0.3s';
                     checkbox.style.boxShadow = '0 0 10px rgba(255, 193, 7, 0.8)';
-                    
                     setTimeout(() => {
                         checkbox.style.transform = 'scale(1)';
                         checkbox.style.boxShadow = 'none';
@@ -914,17 +1076,12 @@
         function calculateTotal() {
             const price = parseFloat(document.getElementById('purchaseUnitPrice').value) || 0;
             const quantity = parseFloat(document.getElementById('purchaseQuantity').value) || 0;
-            const total = price * quantity;
-            document.getElementById('purchaseTotal').textContent = total.toFixed(2);
+            document.getElementById('purchaseTotal').textContent = (price * quantity).toFixed(2);
         }
 
         async function submitPurchase() {
             const form = document.getElementById('purchaseForm');
-            
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
+            if (!form.checkValidity()) { form.reportValidity(); return; }
             
             const itemId = document.getElementById('purchaseItemId').value;
             const item = shoppingItems.find(i => i.id === itemId);
@@ -947,58 +1104,47 @@
                 await fetch(SHEETS_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
                 document.getElementById('sendingIndicator').classList.remove('active');
-                
                 const modal = bootstrap.Modal.getInstance(document.getElementById('purchaseModal'));
                 modal.hide();
-                
                 showNotification('✅ Compra registada no histórico!', 'success');
+                
+                // ✅ Atualizar cache do histórico
+                loadPriceHistory(true);
                 
             } catch (error) {
                 console.error('Erro ao enviar:', error);
                 document.getElementById('sendingIndicator').classList.remove('active');
-                showNotification('❌ Erro ao registar. Tenta novamente.', 'danger');
+                showNotification('❌ Erro ao registar.', 'danger');
             }
         }
 
         // ==========================================
-        // RENDERIZAÇÃO DA LISTA
+        // RENDERIZAÇÃO
         // ==========================================
         function renderItems() {
             const container = document.getElementById('shoppingList');
             const emptyState = document.getElementById('emptyState');
             
             let filteredItems = shoppingItems;
-            
-            if (currentFilter === 'pending') {
-                filteredItems = filteredItems.filter(item => !item.completed);
-            } else if (currentFilter === 'completed') {
-                filteredItems = filteredItems.filter(item => item.completed);
-            }
-            
-            if (currentCategoryFilter !== 'all') {
-                filteredItems = filteredItems.filter(item => item.category === currentCategoryFilter);
-            }
+            if (currentFilter === 'pending') filteredItems = filteredItems.filter(item => !item.completed);
+            else if (currentFilter === 'completed') filteredItems = filteredItems.filter(item => item.completed);
+            if (currentCategoryFilter !== 'all') filteredItems = filteredItems.filter(item => item.category === currentCategoryFilter);
 
             if (filteredItems.length === 0) {
                 container.innerHTML = '';
                 emptyState.style.display = 'block';
                 return;
             }
-
             emptyState.style.display = 'none';
             
             const grouped = {};
             filteredItems.forEach(item => {
-                if (!grouped[item.category]) {
-                    grouped[item.category] = [];
-                }
+                if (!grouped[item.category]) grouped[item.category] = [];
                 grouped[item.category].push(item);
             });
 
@@ -1006,24 +1152,14 @@
             Object.keys(grouped).sort().forEach(category => {
                 const color = categoryColors[category] || '#868e96';
                 const emoji = categoryEmojis[category] || '📦';
-                
                 html += `<div class="mb-4"><h6 class="fw-bold mb-3" style="color: ${color};">${emoji} ${category} (${grouped[category].length})</h6>`;
                 
                 grouped[category].forEach(item => {
                     const creatorInfo = item.createdBy ? `<br><small class="text-muted">Por: ${item.createdBy}</small>` : '';
                     const isCompleted = item.completed;
-                    
-                    const purchaseButtonAction = isCompleted 
-                        ? `openPurchaseModal('${item.id}')` 
-                        : `alertPurchaseNeeded('${item.id}')`;
-                    
-                    const purchaseButtonStyle = isCompleted 
-                        ? '' 
-                        : 'opacity: 0.6; border-style: dashed;';
-                    
-                    const purchaseButtonTitle = isCompleted 
-                        ? 'Registar Preço e Local' 
-                        : 'Clica primeiro no ✓ para marcar como comprado';
+                    const purchaseButtonAction = isCompleted ? `openPurchaseModal('${item.id}')` : `alertPurchaseNeeded('${item.id}')`;
+                    const purchaseButtonStyle = isCompleted ? '' : 'opacity: 0.6; border-style: dashed;';
+                    const purchaseButtonTitle = isCompleted ? 'Registar Preço e Local' : 'Marca primeiro como comprado';
                     
                     html += `
                         <div class="item-card ${isCompleted ? 'checked' : ''}" data-id="${item.id}">
@@ -1055,18 +1191,14 @@
                         </div>
                     `;
                 });
-                
                 html += '</div>';
             });
-
             container.innerHTML = html;
         }
 
         function filterItems(filter) {
             currentFilter = filter;
-            document.querySelectorAll('.filter-buttons .btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.filter-buttons .btn').forEach(btn => btn.classList.remove('active'));
             event.target.closest('button').classList.add('active');
             renderItems();
         }
@@ -1079,50 +1211,35 @@
         function renderCategoryFilters() {
             const categories = [...new Set(shoppingItems.map(item => item.category))];
             const container = document.getElementById('categoryFilters');
-            
             let html = '<span class="badge bg-secondary category-badge" onclick="filterByCategory(\'all\')">Todas</span>';
-            
             categories.forEach(cat => {
                 const color = categoryColors[cat] || '#868e96';
                 const emoji = categoryEmojis[cat] || '📦';
                 html += `<span class="badge category-badge" style="background-color: ${color}; color: white;" onclick="filterByCategory('${cat}')">${emoji} ${cat}</span>`;
             });
-            
             container.innerHTML = html;
         }
 
         function updateStats() {
             const total = shoppingItems.length;
             const completed = shoppingItems.filter(i => i.completed).length;
-            const pending = total - completed;
-            
             document.getElementById('totalItems').textContent = total;
             document.getElementById('completedItems').textContent = completed;
-            document.getElementById('pendingItems').textContent = pending;
+            document.getElementById('pendingItems').textContent = total - completed;
         }
 
         function exportList() {
-            if (shoppingItems.length === 0) {
-                showNotification('A lista está vazia!', 'warning');
-                return;
-            }
-
-            let text = '🛒 LISTA DE COMPRAS FAMILIAR\n';
-            text += '═══════════════════════════════\n';
+            if (shoppingItems.length === 0) { showNotification('Lista vazia!', 'warning'); return; }
+            let text = '🛒 LISTA DE COMPRAS FAMILIAR\n═══════════════════════════════\n';
             text += `Gerada em: ${new Date().toLocaleString('pt-PT')}\n\n`;
-            
             const grouped = {};
             shoppingItems.forEach(item => {
-                if (!grouped[item.category]) {
-                    grouped[item.category] = [];
-                }
+                if (!grouped[item.category]) grouped[item.category] = [];
                 grouped[item.category].push(item);
             });
-
             Object.keys(grouped).sort().forEach(category => {
                 const emoji = categoryEmojis[category] || '📦';
                 text += `${emoji} ${category}\n───────────────────────────────\n`;
-                
                 grouped[category].forEach(item => {
                     const status = item.completed ? '✓' : '○';
                     const creator = item.createdBy ? ` (por: ${item.createdBy})` : '';
@@ -1130,7 +1247,6 @@
                 });
                 text += '\n';
             });
-
             const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1138,8 +1254,7 @@
             a.download = `lista-compras-${new Date().toISOString().split('T')[0]}.txt`;
             a.click();
             URL.revokeObjectURL(url);
-            
-            showNotification('Lista exportada com sucesso!', 'success');
+            showNotification('Lista exportada!', 'success');
         }
 
         function showNotification(message, type) {
@@ -1147,16 +1262,11 @@
             alertDiv.className = `alert alert-${type} alert-dismissible fade show notification-toast`;
             alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
             document.body.appendChild(alertDiv);
-            
-            setTimeout(() => {
-                alertDiv.remove();
-            }, 3000);
+            setTimeout(() => alertDiv.remove(), 3000);
         }
 
         window.addEventListener('beforeunload', function() {
-            if (unsubscribeListener) {
-                unsubscribeListener();
-            }
+            if (unsubscribeListener) unsubscribeListener();
         });
     </script>
 </body>
