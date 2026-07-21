@@ -146,129 +146,110 @@
         /* ============================================ */
         /* ESTILOS DO AUTOCOMPLETE DE HISTÓRICO         */
         /* ============================================ */
-        /* ============================================ */
-/* ESTILOS DO AUTOCOMPLETE DE HISTÓRICO         */
-/* ============================================ */
-.history-suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    max-height: 400px;
-    overflow-y: auto;
-    z-index: 1000;
-    margin-top: 5px;
-    display: none;
-}
+        .product-input-wrapper {
+            position: relative;
+        }
 
-.history-suggestions.active { display: block; }
+        .history-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1050;
+            margin-top: 5px;
+            display: none;
+        }
 
-.history-item {
-    padding: 12px 15px;
-    border-bottom: 1px solid #f0f0f0;
-    cursor: pointer;
-    transition: background 0.2s;
-}
+        .history-suggestions.active { display: block; }
 
-.history-item:hover { background: #f8f9fa; }
-.history-item:last-child { border-bottom: none; }
+        .history-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
 
-.history-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
+        .history-item:hover { background: #f8f9fa; }
+        .history-item:last-child { border-bottom: none; }
 
-.history-item-name {
-    font-weight: 600;
-    color: #333;
-}
+        .history-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
 
-.history-best-price {
-    font-weight: bold;
-    color: var(--success-color);
-    font-size: 1rem;
-}
+        .history-item-name {
+            font-weight: 600;
+            color: #333;
+        }
 
-.history-item-details {
-    display: flex;
-    gap: 8px;
-    font-size: 0.8rem;
-    flex-wrap: wrap;
-    margin-bottom: 4px;
-}
+        .history-best-price {
+            font-weight: bold;
+            color: var(--success-color);
+            font-size: 1rem;
+        }
 
-.history-savings {
-    font-size: 0.75rem;
-    color: #856404;
-    background: #fff3cd;
-    padding: 3px 8px;
-    border-radius: 10px;
-    display: inline-block;
-    margin-top: 4px;
-}
+        .history-item-details {
+            display: flex;
+            gap: 6px;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
 
-.history-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-}
+        .history-savings {
+            font-size: 0.75rem;
+            color: #856404;
+            background: #fff3cd;
+            padding: 4px 10px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 4px;
+        }
 
-.history-badge.price-best {
-    background: #d4edda;
-    color: #155724;
-    font-weight: 600;
-}
+        .history-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
 
-.history-badge.price-avg {
-    background: #e2e3e5;
-    color: #383d41;
-}
+        .history-badge.price-best {
+            background: #d4edda;
+            color: #155724;
+            font-weight: 600;
+        }
 
-.history-badge.store {
-    background: #fff3cd;
-    color: #856404;
-}
+        .history-badge.price-avg {
+            background: #e2e3e5;
+            color: #383d41;
+        }
 
-.history-badge.count {
-    background: #d1ecf1;
-    color: #0c5460;
-}
+        .history-badge.count {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
 
-.history-loading {
-    padding: 15px;
-    text-align: center;
-    color: var(--secondary-color);
-}
+        .history-indicator {
+            position: absolute;
+            right: 10px;
+            top: 38px;
+            color: var(--info-color);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
 
-.history-empty {
-    padding: 15px;
-    text-align: center;
-    color: var(--secondary-color);
-    font-style: italic;
-}
-
-.product-input-wrapper {
-    position: relative;
-}
-
-.history-indicator {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--info-color);
-    font-size: 0.8rem;
-    pointer-events: none;
-}
         @media (max-width: 768px) {
             .main-container { padding: 20px; margin-top: 15px; margin-bottom: 15px; }
         }
@@ -364,15 +345,12 @@
                                 <div class="product-input-wrapper">
                                     <input type="text" class="form-control" id="itemName" 
                                            placeholder="Ex: Leite, Pão, Maçãs..." required
-                                           autocomplete="off"
-                                           oninput="handleProductNameInput()"
-                                           onfocus="handleProductNameFocus()">
+                                           autocomplete="off">
                                     <span class="history-indicator" id="historyIndicator" style="display: none;">
                                         <i class="bi bi-clock-history"></i>
                                     </span>
+                                    <div class="history-suggestions" id="historySuggestions"></div>
                                 </div>
-                                <!-- Dropdown de sugestões do histórico -->
-                                <div class="history-suggestions" id="historySuggestions"></div>
                             </div>
                             <div class="col-md-3">
                                 <label for="itemCategory" class="form-label">Categoria</label>
@@ -627,7 +605,7 @@
         // ==========================================
         // CONFIGURAÇÕES - SUBSTITUI PELOS TEUS DADOS!
         // ==========================================
-       const firebaseConfig = {
+        const firebaseConfig = {
   apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
   authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
   databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
@@ -651,10 +629,12 @@
         let currentUser = localStorage.getItem('currentUser') || '';
         let unsubscribeListener = null;
         
-        // ✅ NOVO: Cache do histórico de preços
+        // Cache do histórico de preços
         let priceHistoryCache = [];
         let historyCacheTimestamp = 0;
         const HISTORY_CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+        
+        let searchTimeout = null;
 
         const categoryColors = {
             'Frutas': '#ff6b6b', 'Vegetais': '#51cf66', 'Laticínios': '#ffd43b',
@@ -678,7 +658,12 @@
             renderItems();
             updateStats();
             renderCategoryFilters();
-            loadPriceHistory(); // ✅ Carregar histórico ao iniciar
+            loadPriceHistory();
+            
+            // Configurar eventos do input do nome do produto
+            const itemNameInput = document.getElementById('itemName');
+            itemNameInput.addEventListener('input', handleProductNameInput);
+            itemNameInput.addEventListener('focus', handleProductNameFocus);
             
             // Fechar sugestões ao clicar fora
             document.addEventListener('click', function(e) {
@@ -691,16 +676,12 @@
         });
 
         // ==========================================
-        // ✅ NOVO: FUNÇÕES DE HISTÓRICO DE PREÇOS
+        // FUNÇÕES DE HISTÓRICO DE PREÇOS
         // ==========================================
         
-        /**
-         * Carrega o histórico de preços do Google Sheets
-         */
         async function loadPriceHistory(forceRefresh = false) {
             const now = Date.now();
             
-            // Usar cache se ainda válido
             if (!forceRefresh && priceHistoryCache.length > 0 && 
                 (now - historyCacheTimestamp) < HISTORY_CACHE_DURATION) {
                 return priceHistoryCache;
@@ -722,150 +703,117 @@
             return priceHistoryCache;
         }
         
-        /**
-         * Pesquisa produtos no histórico pelo nome
-         */
         function searchHistory(query) {
             if (!query || query.length < 2) return [];
             
             const queryLower = query.toLowerCase();
             return priceHistoryCache.filter(item => 
                 item.productName.toLowerCase().includes(queryLower)
-            ).slice(0, 5); // Máximo 5 sugestões
+            ).slice(0, 5);
         }
         
-        /**
-         * Mostra sugestões do histórico
-         */
         function showHistorySuggestions(suggestions) {
-    const container = document.getElementById('historySuggestions');
-    const indicator = document.getElementById('historyIndicator');
-    
-    if (suggestions.length === 0) {
-        container.classList.remove('active');
-        indicator.style.display = 'none';
-        return;
-    }
-    
-    indicator.style.display = 'block';
-    
-    let html = '';
-    suggestions.forEach(item => {
-        // Formatar melhor preço
-        const bestPriceDisplay = item.bestPrice > 0 
-            ? `${item.bestPrice.toFixed(2)}€/${item.unit}` 
-            : 'Sem preço';
-        
-        // Preço médio (se disponível)
-        const avgPriceDisplay = item.avgPrice > 0 
-            ? `Média: ${item.avgPrice.toFixed(2)}€` 
-            : '';
-        
-        // Informação de poupança
-        let savingsInfo = '';
-        if (item.savings > 0 && item.savingsPercent > 0) {
-            savingsInfo = `
-                <div class="history-savings">
-                    💡 Poupas até <strong>${item.savings.toFixed(2)}€</strong> 
-                    (${item.savingsPercent.toFixed(0)}%) comprando no <strong>${item.bestPriceStore || 'local certo'}</strong>
-                </div>
-            `;
-        }
-        
-        // Contagem de compras
-        const purchaseCount = item.totalPurchases > 1 
-            ? `<span class="history-badge count"><i class="bi bi-bag-check"></i> ${item.totalPurchases}x comprado</span>`
-            : '';
-        
-        html += `
-            <div class="history-item" onclick='selectHistoryItem(${JSON.stringify(item).replace(/'/g, "&apos;")})'>
-                <div class="history-item-header">
-                    <div class="history-item-name">${item.productName}</div>
-                    <div class="history-best-price">
-                        <i class="bi bi-trophy"></i> ${bestPriceDisplay}
-                    </div>
-                </div>
-                <div class="history-item-details">
-                    <span class="history-badge price-best">
-                        <i class="bi bi-star-fill"></i> Melhor: ${item.bestPriceStore || 'N/D'}
-                    </span>
-                    ${avgPriceDisplay ? `
-                        <span class="history-badge price-avg">
-                            <i class="bi bi-graph-up"></i> ${avgPriceDisplay}
-                        </span>
-                    ` : ''}
-                    ${purchaseCount}
-                </div>
-                ${savingsInfo}
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-    container.classList.add('active');
-        }
-        
-        /**
-         * Seleciona um item do histórico e preenche o formulário
-         */
-       function selectHistoryItem(item) {
-    document.getElementById('itemName').value = item.productName;
-    
-    // Preencher categoria se existir
-    if (item.category) {
-        const categorySelect = document.getElementById('itemCategory');
-        for (let option of categorySelect.options) {
-            if (option.value === item.category) {
-                categorySelect.value = item.category;
-                break;
+            const container = document.getElementById('historySuggestions');
+            const indicator = document.getElementById('historyIndicator');
+            
+            if (!suggestions || suggestions.length === 0) {
+                container.classList.remove('active');
+                indicator.style.display = 'none';
+                return;
             }
-        }
-    }
-    
-    // Preencher unidade
-    if (item.unit) {
-        document.getElementById('itemUnit').value = item.unit;
-    }
-    
-    // Fechar sugestões
-    document.getElementById('historySuggestions').classList.remove('active');
-    document.getElementById('historyIndicator').style.display = 'none';
-    
-    // Mostrar notificação com o melhor preço
-    if (item.bestPrice > 0 && item.bestPriceStore) {
-        showNotification(
-            `🏆 Melhor preço: ${item.bestPrice.toFixed(2)}€ no ${item.bestPriceStore}`,
-            'info'
-        );
-    } else {
-        showNotification(`📋 Dados de "${item.productName}" preenchidos!`, 'info');
-    }
-}
-        
-        /**
-         * Formata data para exibição
-         */
-        function formatDate(dateString) {
-            if (!dateString) return 'Sem data';
-            try {
-                const date = new Date(dateString);
-                const now = new Date();
-                const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+            
+            indicator.style.display = 'block';
+            
+            let html = '';
+            suggestions.forEach(item => {
+                const bestPriceDisplay = item.bestPrice > 0 
+                    ? `${item.bestPrice.toFixed(2)}€/${item.unit || 'un'}` 
+                    : 'Sem preço';
                 
-                if (diffDays === 0) return 'Hoje';
-                if (diffDays === 1) return 'Ontem';
-                if (diffDays < 7) return `Há ${diffDays} dias`;
-                if (diffDays < 30) return `Há ${Math.floor(diffDays / 7)} sem.`;
-                return date.toLocaleDateString('pt-PT');
-            } catch (e) {
-                return 'Sem data';
+                const avgPriceDisplay = item.avgPrice > 0 
+                    ? `Média: ${item.avgPrice.toFixed(2)}€` 
+                    : '';
+                
+                let savingsInfo = '';
+                if (item.savings > 0 && item.savingsPercent > 0) {
+                    savingsInfo = `
+                        <div class="history-savings">
+                            💡 Poupas até <strong>${item.savings.toFixed(2)}€</strong> 
+                            (${item.savingsPercent.toFixed(0)}%) no <strong>${item.bestPriceStore || 'local certo'}</strong>
+                        </div>
+                    `;
+                }
+                
+                const purchaseCount = item.totalPurchases > 1 
+                    ? `<span class="history-badge count"><i class="bi bi-bag-check"></i> ${item.totalPurchases}x comprado</span>`
+                    : '';
+                
+                const itemData = encodeURIComponent(JSON.stringify(item));
+                
+                html += `
+                    <div class="history-item" onclick="selectHistoryItem('${itemData}')">
+                        <div class="history-item-header">
+                            <div class="history-item-name">${item.productName}</div>
+                            <div class="history-best-price">
+                                <i class="bi bi-trophy"></i> ${bestPriceDisplay}
+                            </div>
+                        </div>
+                        <div class="history-item-details">
+                            <span class="history-badge price-best">
+                                <i class="bi bi-star-fill"></i> Melhor: ${item.bestPriceStore || 'N/D'}
+                            </span>
+                            ${avgPriceDisplay ? `
+                                <span class="history-badge price-avg">
+                                    <i class="bi bi-graph-up"></i> ${avgPriceDisplay}
+                                </span>
+                            ` : ''}
+                            ${purchaseCount}
+                        </div>
+                        ${savingsInfo}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            container.classList.add('active');
+        }
+        
+        function selectHistoryItem(encodedData) {
+            try {
+                const item = JSON.parse(decodeURIComponent(encodedData));
+                
+                document.getElementById('itemName').value = item.productName;
+                
+                if (item.category) {
+                    const categorySelect = document.getElementById('itemCategory');
+                    for (let option of categorySelect.options) {
+                        if (option.value === item.category) {
+                            categorySelect.value = item.category;
+                            break;
+                        }
+                    }
+                }
+                
+                if (item.unit) {
+                    document.getElementById('itemUnit').value = item.unit;
+                }
+                
+                document.getElementById('historySuggestions').classList.remove('active');
+                document.getElementById('historyIndicator').style.display = 'none';
+                
+                if (item.bestPrice > 0 && item.bestPriceStore) {
+                    showNotification(
+                        `🏆 Melhor preço: ${item.bestPrice.toFixed(2)}€ no ${item.bestPriceStore}`,
+                        'info'
+                    );
+                } else {
+                    showNotification(`📋 Dados de "${item.productName}" preenchidos!`, 'info');
+                }
+            } catch (error) {
+                console.error('Erro ao selecionar item:', error);
             }
         }
         
-        /**
-         * Handler do input do nome do produto
-         */
-        let searchTimeout = null;
         function handleProductNameInput() {
             const query = document.getElementById('itemName').value.trim();
             
@@ -877,37 +825,28 @@
                 return;
             }
             
-            // Debounce: esperar 300ms antes de pesquisar
             searchTimeout = setTimeout(() => {
                 const suggestions = searchHistory(query);
                 showHistorySuggestions(suggestions);
             }, 300);
         }
         
-        /**
-       
-         */
-		 Handler do focus no input - mostra produtos mais comprados recentemente
- */
-function handleProductNameFocus() {
-    if (priceHistoryCache.length > 0) {
-        // Ordenar por número de compras (mais populares primeiro)
-        const popular = [...priceHistoryCache]
-            .sort((a, b) => b.totalPurchases - a.totalPurchases)
-            .slice(0, 5);
-        
-        if (popular.length > 0) {
-            showHistorySuggestions(popular);
-        }
-    } else {
-        loadPriceHistory().then(() => 
-         {
+        function handleProductNameFocus() {
+            if (priceHistoryCache.length > 0) {
+                const popular = [...priceHistoryCache]
+                    .sort((a, b) => b.totalPurchases - a.totalPurchases)
+                    .slice(0, 5);
+                
+                if (popular.length > 0) {
+                    showHistorySuggestions(popular);
+                }
+            } else {
+                loadPriceHistory().then(() => {
                     if (priceHistoryCache.length > 0) {
-                        const recent = priceHistoryCache
-                            .filter(item => item.lastDate)
-                            .sort((a, b) => new Date(b.lastDate) - new Date(a.lastDate))
+                        const popular = [...priceHistoryCache]
+                            .sort((a, b) => b.totalPurchases - a.totalPurchases)
                             .slice(0, 5);
-                        showHistorySuggestions(recent);
+                        showHistorySuggestions(popular);
                     }
                 });
             }
@@ -944,7 +883,7 @@ function handleProductNameFocus() {
         }
 
         // ==========================================
-        // FIREBASE - SINCRONIZAÇÃO
+        // FIREBASE
         // ==========================================
         function setupRealtimeListener() {
             updateSyncStatus('connecting');
@@ -1177,7 +1116,6 @@ function handleProductNameFocus() {
                 modal.hide();
                 showNotification('✅ Compra registada no histórico!', 'success');
                 
-                // ✅ Atualizar cache do histórico
                 loadPriceHistory(true);
                 
             } catch (error) {
