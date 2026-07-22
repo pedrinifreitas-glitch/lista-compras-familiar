@@ -3,148 +3,607 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Compras Familiar - Sincronizada</title>
+    <title>Lista de Compras Familiar</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+    <!-- NOVO FAVICON: Cesto de compras -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧺</text></svg>">
     
+    <!-- NOVA FONTE: Inter (moderna, sem serifa) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <style>
+        /* ============================================ */
+        /* NOVO ESQUEMA DE CORES                        */
+        /* ============================================ */
         :root {
-            --primary-color: #4e73df;
-            --secondary-color: #858796;
-            --success-color: #1cc88a;
-            --danger-color: #e74a3b;
-            --warning-color: #f6c23e;
-            --info-color: #36b9cc;
+            --primary: #0d9488;        /* Teal - cor principal */
+            --primary-dark: #0f766e;   /* Teal escuro */
+            --primary-light: #ccfbf1;  /* Teal muito claro */
+            --accent: #f97316;         /* Coral/Laranja - destaque */
+            --accent-dark: #ea580c;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #eab308;
+            --info: #0891b2;
+            
+            /* Neutros */
+            --bg: #fafafa;             /* Fundo principal - quase branco */
+            --surface: #ffffff;        /* Superfície dos cards */
+            --border: #e5e7eb;         /* Bordas subtis */
+            --text: #111827;           /* Texto principal - quase preto */
+            --text-secondary: #6b7280; /* Texto secundário */
+            --text-muted: #9ca3af;     /* Texto muito claro */
+        }
+
+        /* ============================================ */
+        /* BASE                                         */
+        /* ============================================ */
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
         }
 
+        /* ============================================ */
+        /* LAYOUT PRINCIPAL                             */
+        /* ============================================ */
         .main-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            padding: 30px;
+            background: var(--surface);
+            border-radius: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 10px 40px rgba(0, 0, 0, 0.04);
+            padding: 40px;
             margin-top: 30px;
             margin-bottom: 30px;
         }
 
-        .header-title {
-            color: var(--primary-color);
-            font-weight: 700;
+        /* ============================================ */
+        /* CABEÇALHO                                    */
+        /* ============================================ */
+        .header {
             text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .header-logo {
+            font-size: 4rem;
             margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .header-title {
+            color: var(--text);
+            font-weight: 800;
+            font-size: 2.2rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin: 0;
         }
 
         .sync-status {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 15px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
 
-        .sync-status.online { background: rgba(28, 200, 138, 0.1); color: var(--success-color); }
-        .sync-status.offline { background: rgba(231, 74, 59, 0.1); color: var(--danger-color); }
+        .sync-status.online {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .sync-status.offline {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        /* ============================================ */
+        /* USER INFO                                    */
+        /* ============================================ */
+        .user-info {
+            background: var(--primary);
+            color: white;
+            padding: 18px 24px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .user-info h5 {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* ============================================ */
+        /* FORMULÁRIO ADICIONAR ITEM                    */
+        /* ============================================ */
+        .add-form-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 30px;
+        }
+
+        .add-form-card h5 {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
+        }
+
+        /* ============================================ */
+        /* BOTÕES                                       */
+        /* ============================================ */
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            border: none;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 12px;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            border: none;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 12px;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            border: none;
+            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: var(--text);
+        }
+
+        /* Botões de filtro */
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .filter-buttons .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 10px 18px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+        }
+
+        .filter-buttons .btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-buttons .btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .filter-buttons .btn-outline-success.active,
+        .filter-buttons .btn-outline-info.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        /* ============================================ */
+        /* CATEGORIAS - FILTROS                         */
+        /* ============================================ */
+        .category-section-label {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
 
         .category-badge {
-            font-size: 0.85rem;
-            padding: 8px 15px;
+            font-size: 0.9rem;
+            padding: 8px 16px;
             border-radius: 20px;
-            margin-right: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
         }
 
         .category-badge:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
-        .item-card {
-            background: white;
+        /* ============================================ */
+        /* GRELLA DE PRODUTOS                           */
+        /* ============================================ */
+        .category-group {
+            margin-bottom: 32px;
+        }
+
+        .category-group-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .category-group-title .count {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.85rem;
+            padding: 2px 10px;
             border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary-color);
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        /* ============================================ */
+        /* CARD DE PRODUTO                              */
+        /* ============================================ */
+        .item-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            transition: all 0.2s;
+            position: relative;
         }
 
         .item-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.1);
+            transform: translateY(-2px);
         }
 
-        .item-card.checked { opacity: 0.6; background: #f8f9fa; }
-        .item-card.checked .item-name { text-decoration: line-through; color: var(--secondary-color); }
+        .item-card.checked {
+            background: #f9fafb;
+            border-color: var(--border);
+            opacity: 0.75;
+        }
+
+        .item-card.checked .item-name {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .item-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .item-checkbox {
+            width: 22px;
+            height: 22px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .item-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            flex-grow: 1;
+            line-height: 1.3;
+        }
+
+        .item-quantity-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .item-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+
+        .item-creator {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .item-creator i {
+            color: var(--primary);
+        }
+
+        .completed-badge {
+            background: var(--success);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 6px;
+        }
 
         .btn-action {
-            width: 35px;
-            height: 35px;
+            width: 36px;
+            height: 36px;
             padding: 0;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            margin-left: 5px;
-        }
-
-        .modal-header { background: var(--primary-color); color: white; }
-
-        .stats-card {
-            background: linear-gradient(135deg, var(--primary-color), #224abe);
-            color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .stats-card:hover { transform: translateY(-5px); }
-
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--secondary-color); }
-        .empty-state i { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; }
-
-        .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-
-        .user-info {
-            background: linear-gradient(135deg, var(--info-color), #2c9faf);
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        .price-input-group {
-            background: #f8f9fa;
             border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            transition: all 0.2s;
         }
 
-        .price-display {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--success-color);
-            text-align: center;
-            padding: 10px;
-            background: #d4edda;
-            border-radius: 8px;
-            margin-top: 10px;
+        .btn-action:hover {
+            transform: translateY(-1px);
         }
 
-        .sending-indicator { display: none; text-align: center; padding: 20px; }
-        .sending-indicator.active { display: block; }
+        .btn-action.btn-edit:hover {
+            border-color: var(--info);
+            color: var(--info);
+            background: #ecfeff;
+        }
+
+        .btn-action.btn-purchase:hover {
+            border-color: var(--success);
+            color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .btn-action.btn-delete:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: #fef2f2;
+        }
+
+        .btn-action.disabled-purchase {
+            opacity: 0.4;
+            border-style: dashed;
+        }
 
         /* ============================================ */
-        /* ESTILOS DO AUTOCOMPLETE DE HISTÓRICO         */
+        /* ESTATÍSTICAS (NO FUNDO)                      */
+        /* ============================================ */
+        .stats-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--border);
+        }
+
+        .stats-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card.total {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .stat-card.completed {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .stat-card.pending {
+            border-color: var(--accent);
+            background: #fff7ed;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        .stat-card.total .stat-value { color: var(--primary-dark); }
+        .stat-card.completed .stat-value { color: var(--success); }
+        .stat-card.pending .stat-value { color: var(--accent-dark); }
+
+        /* ============================================ */
+        /* AÇÕES INFERIORES                             */
+        /* ============================================ */
+        .bottom-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        /* ============================================ */
+        /* EMPTY STATE                                  */
+        /* ============================================ */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state h4 {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ============================================ */
+        /* MODAIS                                       */
+        /* ============================================ */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 20px 24px;
+        }
+
+        .modal-header.purchase {
+            background: var(--success);
+        }
+
+        .modal-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .modal-body {
+            padding: 28px;
+        }
+
+        .modal-footer {
+            border-top: 2px solid var(--border);
+            padding: 16px 24px;
+        }
+
+        /* ============================================ */
+        /* AUTOCOMPLETE                                 */
         /* ============================================ */
         .product-input-wrapper {
             position: relative;
@@ -155,10 +614,10 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             max-height: 400px;
             overflow-y: auto;
             z-index: 1050;
@@ -169,13 +628,13 @@
         .history-suggestions.active { display: block; }
 
         .history-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.15s;
         }
 
-        .history-item:hover { background: #f8f9fa; }
+        .history-item:hover { background: var(--primary-light); }
         .history-item:last-child { border-bottom: none; }
 
         .history-item-header {
@@ -188,14 +647,15 @@
         }
 
         .history-item-name {
-            font-weight: 600;
-            color: #333;
+            font-weight: 700;
+            color: var(--text);
+            font-size: 1rem;
         }
 
         .history-best-price {
-            font-weight: bold;
-            color: var(--success-color);
-            font-size: 1rem;
+            font-weight: 800;
+            color: var(--success);
+            font-size: 1.05rem;
         }
 
         .history-item-details {
@@ -203,249 +663,300 @@
             gap: 6px;
             font-size: 0.8rem;
             flex-wrap: wrap;
-            margin-bottom: 4px;
         }
 
         .history-savings {
-            font-size: 0.75rem;
-            color: #856404;
-            background: #fff3cd;
+            font-size: 0.8rem;
+            color: var(--accent-dark);
+            background: #fff7ed;
             padding: 4px 10px;
             border-radius: 10px;
             display: inline-block;
-            margin-top: 4px;
+            margin-top: 6px;
+            font-weight: 600;
         }
 
         .history-badge {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 12px;
             font-size: 0.75rem;
-        }
-
-        .history-badge.price-best {
-            background: #d4edda;
-            color: #155724;
             font-weight: 600;
         }
 
+        .history-badge.price-best {
+            background: #f0fdf4;
+            color: var(--success);
+        }
+
         .history-badge.price-avg {
-            background: #e2e3e5;
-            color: #383d41;
+            background: #f3f4f6;
+            color: var(--text-secondary);
         }
 
         .history-badge.count {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: #ecfeff;
+            color: var(--info);
         }
 
         .history-indicator {
             position: absolute;
-            right: 10px;
-            top: 38px;
-            color: var(--info-color);
-            font-size: 0.9rem;
+            right: 12px;
+            top: 42px;
+            color: var(--primary);
+            font-size: 1rem;
             pointer-events: none;
         }
 
-        @media (max-width: 768px) {
-            .main-container { padding: 20px; margin-top: 15px; margin-bottom: 15px; }
+        /* ============================================ */
+        /* REGISTO DE COMPRA                            */
+        /* ============================================ */
+        .price-input-group {
+            background: #f9fafb;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border: 2px solid var(--border);
         }
 
-        .animate-fade-in { animation: fadeIn 0.5s ease-in; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .price-display {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--success);
+            text-align: center;
+            padding: 14px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            margin-top: 14px;
+            border: 2px dashed var(--success);
         }
 
+        .sending-indicator { display: none; text-align: center; padding: 20px; }
+        .sending-indicator.active { display: block; }
+
+        /* ============================================ */
+        /* NOTIFICAÇÕES                                 */
+        /* ============================================ */
         .notification-toast {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 9999;
             min-width: 300px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ============================================ */
+        /* RESPONSIVO                                   */
+        /* ============================================ */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+                border-radius: 16px;
+            }
+
+            .header-title {
+                font-size: 1.6rem;
+            }
+
+            .header-logo {
+                font-size: 3rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="main-container animate-fade-in">
-            <div class="row mb-3">
-                <div class="col-12">
-                    <h1 class="header-title">
-                        <i class="bi bi-cart-check"></i> Lista de Compras Familiar
-                    </h1>
-                    <div id="syncStatus" class="sync-status offline">
-                        <i class="bi bi-wifi-off"></i> A conectar...
-                    </div>
+        <div class="main-container">
+            
+            <!-- CABEÇALHO -->
+            <div class="header">
+                <div class="header-logo">🧺</div>
+                <h1 class="header-title">Lista de Compras</h1>
+                <p class="header-subtitle">Organiza as compras da tua família</p>
+                <div id="syncStatus" class="sync-status offline">
+                    <i class="bi bi-wifi-off"></i> A conectar...
                 </div>
             </div>
 
+            <!-- USER INFO -->
             <div class="user-info">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <div>
-                        <h5 class="mb-1"><i class="bi bi-person-circle"></i> Utilizador Atual</h5>
-                        <p class="mb-0" id="currentUserName">Carregando...</p>
+                        <h5><i class="bi bi-person-circle"></i> Utilizador</h5>
+                        <p id="currentUserName">Carregando...</p>
                     </div>
-                    <button class="btn btn-light btn-sm" onclick="changeUser()">
-                        <i class="bi bi-person-gear"></i> Alterar Utilizador
+                    <button class="btn btn-light btn-sm" onclick="changeUser()" style="font-weight: 600;">
+                        <i class="bi bi-arrow-repeat"></i> Alterar
                     </button>
                 </div>
             </div>
 
-            <div class="row mb-4">
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="stats-card">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">Total de Itens</h6>
-                                <h3 class="mb-0" id="totalItems">0</h3>
+            <!-- FORMULÁRIO ADICIONAR ITEM -->
+            <div class="add-form-card">
+                <h5><i class="bi bi-plus-circle" style="color: var(--primary);"></i> Adicionar Produto</h5>
+                <form id="addItemForm">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="itemName" class="form-label">Produto</label>
+                            <div class="product-input-wrapper">
+                                <input type="text" class="form-control" id="itemName" 
+                                       placeholder="Ex: Leite, Pão..." required autocomplete="off">
+                                <span class="history-indicator" id="historyIndicator" style="display: none;">
+                                    <i class="bi bi-clock-history"></i>
+                                </span>
+                                <div class="history-suggestions" id="historySuggestions"></div>
                             </div>
-                            <i class="bi bi-list-ul" style="font-size: 2rem; opacity: 0.5;"></i>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="itemCategory" class="form-label">Categoria</label>
+                            <select class="form-select" id="itemCategory" required>
+                                <option value="">Selecionar...</option>
+                                <option value="Frutas">🍎 Frutas</option>
+                                <option value="Vegetais">🥬 Vegetais</option>
+                                <option value="Laticínios">🥛 Laticínios</option>
+                                <option value="Carnes">🥩 Carnes</option>
+                                <option value="Padaria">🍞 Padaria</option>
+                                <option value="Bebidas">🥤 Bebidas</option>
+                                <option value="Congelados">❄️ Congelados</option>
+                                <option value="Limpeza">🧹 Limpeza</option>
+                                <option value="Higiene">🧴 Higiene</option>
+                                <option value="Outros">📦 Outros</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="itemQuantity" class="form-label">Qtd</label>
+                            <input type="number" class="form-control" id="itemQuantity" min="1" value="1" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="itemUnit" class="form-label">Unidade</label>
+                            <select class="form-select" id="itemUnit">
+                                <option value="un">un</option>
+                                <option value="kg">kg</option>
+                                <option value="lt">lt</option>
+                                <option value="cx">cx</option>
+                                <option value="pct">pct</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="stats-card" style="background: linear-gradient(135deg, var(--success-color), #17a673);">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">Comprados</h6>
-                                <h3 class="mb-0" id="completedItems">0</h3>
-                            </div>
-                            <i class="bi bi-check-circle" style="font-size: 2rem; opacity: 0.5;"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="stats-card" style="background: linear-gradient(135deg, var(--warning-color), #dda20a);">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1">Por Comprar</h6>
-                                <h3 class="mb-0" id="pendingItems">0</h3>
-                            </div>
-                            <i class="bi bi-clock" style="font-size: 2rem; opacity: 0.5;"></i>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
 
-            <!-- Add Item Form -->
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Adicionar Novo Item</h5>
-                </div>
-                <div class="card-body">
-                    <form id="addItemForm">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <label for="itemName" class="form-label">Nome do Produto</label>
-                                <div class="product-input-wrapper">
-                                    <input type="text" class="form-control" id="itemName" 
-                                           placeholder="Ex: Leite, Pão, Maçãs..." required
-                                           autocomplete="off">
-                                    <span class="history-indicator" id="historyIndicator" style="display: none;">
-                                        <i class="bi bi-clock-history"></i>
-                                    </span>
-                                    <div class="history-suggestions" id="historySuggestions"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="itemCategory" class="form-label">Categoria</label>
-                                <select class="form-select" id="itemCategory" required>
-                                    <option value="">Selecionar...</option>
-                                    <option value="Frutas">🍎 Frutas</option>
-                                    <option value="Vegetais">🥬 Vegetais</option>
-                                    <option value="Laticínios">🥛 Laticínios</option>
-                                    <option value="Carnes">🥩 Carnes</option>
-                                    <option value="Padaria">🍞 Padaria</option>
-                                    <option value="Bebidas">🥤 Bebidas</option>
-                                    <option value="Congelados">❄️ Congelados</option>
-                                    <option value="Limpeza">🧹 Limpeza</option>
-                                    <option value="Higiene">🧴 Higiene</option>
-                                    <option value="Outros">📦 Outros</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="itemQuantity" class="form-label">Quantidade</label>
-                                <input type="number" class="form-control" id="itemQuantity" min="1" value="1" required>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="itemUnit" class="form-label">Unidade</label>
-                                <select class="form-select" id="itemUnit">
-                                    <option value="un">un</option>
-                                    <option value="kg">kg</option>
-                                    <option value="lt">lt</option>
-                                    <option value="cx">cx</option>
-                                    <option value="pct">pct</option>
-                                </select>
-                            </div>
-                            <div class="col-md-1 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-plus-lg"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+            <!-- FILTROS -->
             <div class="filter-buttons">
-                <button class="btn btn-outline-primary active" onclick="filterItems('all')">
+                <button class="btn active" onclick="filterItems('all')">
                     <i class="bi bi-list"></i> Todos
                 </button>
-                <button class="btn btn-outline-success" onclick="filterItems('pending')">
+                <button class="btn" onclick="filterItems('pending')">
                     <i class="bi bi-clock"></i> Por Comprar
                 </button>
-                <button class="btn btn-outline-info" onclick="filterItems('completed')">
+                <button class="btn" onclick="filterItems('completed')">
                     <i class="bi bi-check-circle"></i> Comprados
                 </button>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold">Filtrar por Categoria:</label>
+            <div class="mb-4">
+                <div class="category-section-label">Filtrar por categoria</div>
                 <div id="categoryFilters" class="d-flex flex-wrap gap-2">
-                    <span class="badge bg-secondary category-badge" onclick="filterByCategory('all')">Todas</span>
+                    <span class="category-badge" onclick="filterByCategory('all')">Todas</span>
                 </div>
             </div>
 
+            <!-- LISTA DE PRODUTOS -->
             <div id="shoppingList"></div>
 
+            <!-- EMPTY STATE -->
             <div id="emptyState" class="empty-state" style="display: none;">
-                <i class="bi bi-cart-x"></i>
-                <h4>A tua lista está vazia!</h4>
-                <p>Adiciona itens para começar a organizar as tuas compras.</p>
+                <i class="bi bi-basket"></i>
+                <h4>A lista está vazia</h4>
+                <p>Adiciona produtos para começar</p>
             </div>
 
-            <div class="mt-4 d-flex justify-content-between flex-wrap gap-2">
-                <button class="btn btn-danger" onclick="clearCompleted()">
-                    <i class="bi bi-trash"></i> Limpar Comprados
-                </button>
-                <button class="btn btn-warning" onclick="clearAll()">
-                    <i class="bi bi-x-circle"></i> Limpar Tudo
-                </button>
-                <button class="btn btn-success" onclick="exportList()">
-                    <i class="bi bi-download"></i> Exportar Lista
-                </button>
+            <!-- ============================================ -->
+            <!-- ESTATÍSTICAS NO FUNDO (ANTES DO RODAPÉ)      -->
+            <!-- ============================================ -->
+            <div class="stats-section">
+                <div class="stats-section-title">
+                    <i class="bi bi-bar-chart"></i> Resumo da Lista
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card total">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-label">Total</div>
+                        <div class="stat-value" id="totalItems">0</div>
+                    </div>
+                    <div class="stat-card completed">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-label">Comprados</div>
+                        <div class="stat-value" id="completedItems">0</div>
+                    </div>
+                    <div class="stat-card pending">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-label">Por Comprar</div>
+                        <div class="stat-value" id="pendingItems">0</div>
+                    </div>
+                </div>
+
+                <!-- AÇÕES INFERIORES -->
+                <div class="bottom-actions">
+                    <button class="btn btn-danger" onclick="clearCompleted()">
+                        <i class="bi bi-trash"></i> Limpar Comprados
+                    </button>
+                    <button class="btn btn-warning" onclick="clearAll()">
+                        <i class="bi bi-x-circle"></i> Limpar Tudo
+                    </button>
+                    <button class="btn btn-success" onclick="exportList()">
+                        <i class="bi bi-download"></i> Exportar
+                    </button>
+                </div>
             </div>
+
         </div>
     </div>
 
-    <!-- Edit Modal -->
+    <!-- MODAL EDITAR -->
     <div class="modal fade" id="editModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Editar Item</h5>
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Editar Produto</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="editItemForm">
                         <input type="hidden" id="editItemId">
                         <div class="mb-3">
-                            <label for="editItemName" class="form-label">Nome do Produto</label>
+                            <label for="editItemName" class="form-label">Produto</label>
                             <input type="text" class="form-control" id="editItemName" required>
                         </div>
                         <div class="mb-3">
@@ -483,13 +994,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="saveEdit()">Guardar Alterações</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEdit()">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Change User Modal -->
+    <!-- MODAL UTILIZADOR -->
     <div class="modal fade" id="userModal" tabindex="-1">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -501,7 +1012,7 @@
                     <form id="userForm">
                         <div class="mb-3">
                             <label for="userName" class="form-label">O teu nome</label>
-                            <input type="text" class="form-control" id="userName" placeholder="Ex: João, Maria..." required>
+                            <input type="text" class="form-control" id="userName" placeholder="Ex: João" required>
                         </div>
                     </form>
                 </div>
@@ -512,14 +1023,12 @@
         </div>
     </div>
 
-    <!-- Purchase Registration Modal -->
+    <!-- MODAL REGISTO DE COMPRA -->
     <div class="modal fade" id="purchaseModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header" style="background: var(--success-color); color: white;">
-                    <h5 class="modal-title">
-                        <i class="bi bi-cash-coin"></i> Registar Compra
-                    </h5>
+                <div class="modal-header purchase">
+                    <h5 class="modal-title"><i class="bi bi-cash-coin"></i> Registar Compra</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -527,15 +1036,15 @@
                         <input type="hidden" id="purchaseItemId">
                         
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Produto</label>
+                            <label class="form-label">Produto</label>
                             <input type="text" class="form-control" id="purchaseProductName" readonly 
-                                   style="background: #e9ecef;">
+                                   style="background: #f3f4f6; font-weight: 600;">
                         </div>
                         
                         <div class="price-input-group">
                             <div class="row g-3">
                                 <div class="col-6">
-                                    <label for="purchaseUnitPrice" class="form-label">Preço Unitário (€)</label>
+                                    <label for="purchaseUnitPrice" class="form-label">Preço Unit. (€)</label>
                                     <input type="number" class="form-control" id="purchaseUnitPrice" 
                                            step="0.01" min="0" placeholder="0.00" required 
                                            oninput="calculateTotal()">
@@ -558,7 +1067,7 @@
                                 <i class="bi bi-shop"></i> Local de Compra
                             </label>
                             <input type="text" class="form-control" id="purchaseStore" 
-                                   list="storesList" placeholder="Ex: Pingo Doce, Continente..." required>
+                                   list="storesList" placeholder="Ex: Pingo Doce..." required>
                             <datalist id="storesList">
                                 <option value="Pingo Doce">
                                 <option value="Continente">
@@ -567,7 +1076,6 @@
                                 <option value="Mercadona">
                                 <option value="Minipreço">
                                 <option value="Intermarché">
-                                <option value="Outro">
                             </datalist>
                         </div>
                         
@@ -576,21 +1084,19 @@
                                 <i class="bi bi-person"></i> Comprado por
                             </label>
                             <input type="text" class="form-control" id="purchaseBuyer" readonly 
-                                   style="background: #e9ecef;">
+                                   style="background: #f3f4f6; font-weight: 600;">
                         </div>
                         
                         <div id="sendingIndicator" class="sending-indicator">
-                            <div class="spinner-border text-success" role="status">
-                                <span class="visually-hidden">A enviar...</span>
-                            </div>
-                            <p class="mt-2">A registar no histórico...</p>
+                            <div class="spinner-border text-success" role="status"></div>
+                            <p class="mt-2">A registar...</p>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" onclick="submitPurchase()">
-                        <i class="bi bi-check-circle"></i> Registar Compra
+                        <i class="bi bi-check-circle"></i> Registar
                     </button>
                 </div>
             </div>
@@ -605,7 +1111,7 @@
         // ==========================================
         // CONFIGURAÇÕES - SUBSTITUI PELOS TEUS DADOS!
         // ==========================================
-        const firebaseConfig = {
+       const firebaseConfig = {
   apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
   authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
   databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
@@ -629,19 +1135,11 @@
         let currentUser = localStorage.getItem('currentUser') || '';
         let unsubscribeListener = null;
         
-        // Cache do histórico de preços
         let priceHistoryCache = [];
         let historyCacheTimestamp = 0;
-        const HISTORY_CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+        const HISTORY_CACHE_DURATION = 5 * 60 * 1000;
         
         let searchTimeout = null;
-
-        const categoryColors = {
-            'Frutas': '#ff6b6b', 'Vegetais': '#51cf66', 'Laticínios': '#ffd43b',
-            'Carnes': '#ff922b', 'Padaria': '#fcc419', 'Bebidas': '#339af0',
-            'Congelados': '#22b8cf', 'Limpeza': '#845ef7', 'Higiene': '#f06595',
-            'Outros': '#868e96'
-        };
 
         const categoryEmojis = {
             'Frutas': '🍎', 'Vegetais': '🥬', 'Laticínios': '🥛', 'Carnes': '🥩',
@@ -660,12 +1158,10 @@
             renderCategoryFilters();
             loadPriceHistory();
             
-            // Configurar eventos do input do nome do produto
             const itemNameInput = document.getElementById('itemName');
             itemNameInput.addEventListener('input', handleProductNameInput);
             itemNameInput.addEventListener('focus', handleProductNameFocus);
             
-            // Fechar sugestões ao clicar fora
             document.addEventListener('click', function(e) {
                 const input = document.getElementById('itemName');
                 const suggestions = document.getElementById('historySuggestions');
@@ -676,9 +1172,8 @@
         });
 
         // ==========================================
-        // FUNÇÕES DE HISTÓRICO DE PREÇOS
+        // HISTÓRICO DE PREÇOS
         // ==========================================
-        
         async function loadPriceHistory(forceRefresh = false) {
             const now = Date.now();
             
@@ -694,7 +1189,6 @@
                 if (data.status === 'success') {
                     priceHistoryCache = data.history || [];
                     historyCacheTimestamp = now;
-                    console.log('Histórico carregado:', priceHistoryCache.length, 'produtos');
                 }
             } catch (error) {
                 console.error('Erro ao carregar histórico:', error);
@@ -705,7 +1199,6 @@
         
         function searchHistory(query) {
             if (!query || query.length < 2) return [];
-            
             const queryLower = query.toLowerCase();
             return priceHistoryCache.filter(item => 
                 item.productName.toLowerCase().includes(queryLower)
@@ -738,14 +1231,13 @@
                 if (item.savings > 0 && item.savingsPercent > 0) {
                     savingsInfo = `
                         <div class="history-savings">
-                            💡 Poupas até <strong>${item.savings.toFixed(2)}€</strong> 
-                            (${item.savingsPercent.toFixed(0)}%) no <strong>${item.bestPriceStore || 'local certo'}</strong>
+                            💡 Poupas ${item.savings.toFixed(2)}€ (${item.savingsPercent.toFixed(0)}%) no ${item.bestPriceStore || 'local certo'}
                         </div>
                     `;
                 }
                 
                 const purchaseCount = item.totalPurchases > 1 
-                    ? `<span class="history-badge count"><i class="bi bi-bag-check"></i> ${item.totalPurchases}x comprado</span>`
+                    ? `<span class="history-badge count"><i class="bi bi-bag-check"></i> ${item.totalPurchases}x</span>`
                     : '';
                 
                 const itemData = encodeURIComponent(JSON.stringify(item));
@@ -755,12 +1247,12 @@
                         <div class="history-item-header">
                             <div class="history-item-name">${item.productName}</div>
                             <div class="history-best-price">
-                                <i class="bi bi-trophy"></i> ${bestPriceDisplay}
+                                <i class="bi bi-trophy-fill"></i> ${bestPriceDisplay}
                             </div>
                         </div>
                         <div class="history-item-details">
                             <span class="history-badge price-best">
-                                <i class="bi bi-star-fill"></i> Melhor: ${item.bestPriceStore || 'N/D'}
+                                <i class="bi bi-star-fill"></i> ${item.bestPriceStore || 'N/D'}
                             </span>
                             ${avgPriceDisplay ? `
                                 <span class="history-badge price-avg">
@@ -807,16 +1299,15 @@
                         'info'
                     );
                 } else {
-                    showNotification(`📋 Dados de "${item.productName}" preenchidos!`, 'info');
+                    showNotification(`📋 Dados preenchidos!`, 'info');
                 }
             } catch (error) {
-                console.error('Erro ao selecionar item:', error);
+                console.error('Erro:', error);
             }
         }
         
         function handleProductNameInput() {
             const query = document.getElementById('itemName').value.trim();
-            
             clearTimeout(searchTimeout);
             
             if (query.length < 2) {
@@ -836,10 +1327,7 @@
                 const popular = [...priceHistoryCache]
                     .sort((a, b) => b.totalPurchases - a.totalPurchases)
                     .slice(0, 5);
-                
-                if (popular.length > 0) {
-                    showHistorySuggestions(popular);
-                }
+                if (popular.length > 0) showHistorySuggestions(popular);
             } else {
                 loadPriceHistory().then(() => {
                     if (priceHistoryCache.length > 0) {
@@ -853,7 +1341,7 @@
         }
 
         // ==========================================
-        // FUNÇÕES DE UTILIZADOR
+        // UTILIZADOR
         // ==========================================
         function checkUser() {
             if (!currentUser) {
@@ -878,7 +1366,7 @@
                 document.getElementById('currentUserName').textContent = currentUser;
                 const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
                 modal.hide();
-                showNotification(`Bem-vindo, ${currentUser}!`, 'success');
+                showNotification(`Olá, ${currentUser}!`, 'success');
             }
         }
 
@@ -900,7 +1388,7 @@
                     renderCategoryFilters();
                     updateSyncStatus('online');
                 }, (error) => {
-                    console.error('Erro na sincronização:', error);
+                    console.error('Erro:', error);
                     updateSyncStatus('offline');
                 });
         }
@@ -909,7 +1397,7 @@
             const statusEl = document.getElementById('syncStatus');
             if (status === 'online') {
                 statusEl.className = 'sync-status online';
-                statusEl.innerHTML = '<i class="bi bi-wifi"></i> Sincronizado em tempo real';
+                statusEl.innerHTML = '<i class="bi bi-wifi"></i> Sincronizado';
             } else if (status === 'offline') {
                 statusEl.className = 'sync-status offline';
                 statusEl.innerHTML = '<i class="bi bi-wifi-off"></i> Sem conexão';
@@ -940,14 +1428,12 @@
                 };
 
                 await db.collection('shoppingList').add(newItem);
-                
                 this.reset();
                 document.getElementById('itemQuantity').value = 1;
-                
-                showNotification('Item adicionado e sincronizado!', 'success');
+                showNotification('Produto adicionado!', 'success');
             } catch (error) {
-                console.error('Erro ao adicionar:', error);
-                showNotification('Erro ao adicionar item.', 'danger');
+                console.error('Erro:', error);
+                showNotification('Erro ao adicionar.', 'danger');
             }
         });
 
@@ -964,18 +1450,18 @@
                     });
                 }
             } catch (error) {
-                console.error('Erro ao atualizar:', error);
+                console.error('Erro:', error);
             }
         }
 
         async function deleteItem(id) {
             if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
-            if (confirm('Tens a certeza que queres eliminar este item?')) {
+            if (confirm('Eliminar este produto?')) {
                 try {
                     await db.collection('shoppingList').doc(id).delete();
-                    showNotification('Item eliminado!', 'danger');
+                    showNotification('Produto eliminado', 'danger');
                 } catch (error) {
-                    console.error('Erro ao eliminar:', error);
+                    console.error('Erro:', error);
                 }
             }
         }
@@ -1008,33 +1494,33 @@
                 await db.collection('shoppingList').doc(id).update(updates);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
                 modal.hide();
-                showNotification('Item atualizado!', 'success');
+                showNotification('Produto atualizado!', 'success');
             } catch (error) {
-                console.error('Erro ao editar:', error);
+                console.error('Erro:', error);
             }
         }
 
         async function clearCompleted() {
             if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
             const completedItems = shoppingItems.filter(i => i.completed);
-            if (completedItems.length > 0 && confirm(`Eliminar ${completedItems.length} itens comprados?`)) {
+            if (completedItems.length > 0 && confirm(`Eliminar ${completedItems.length} produtos comprados?`)) {
                 try {
                     const batch = db.batch();
                     completedItems.forEach(item => batch.delete(db.collection('shoppingList').doc(item.id)));
                     await batch.commit();
-                    showNotification('Itens comprados eliminados!', 'warning');
+                    showNotification('Comprados eliminados', 'warning');
                 } catch (error) { console.error('Erro:', error); }
             }
         }
 
         async function clearAll() {
             if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
-            if (shoppingItems.length > 0 && confirm('Eliminar TODOS os itens?')) {
+            if (shoppingItems.length > 0 && confirm('Eliminar TODOS os produtos?')) {
                 try {
                     const batch = db.batch();
                     shoppingItems.forEach(item => batch.delete(db.collection('shoppingList').doc(item.id)));
                     await batch.commit();
-                    showNotification('Lista limpa!', 'danger');
+                    showNotification('Lista limpa', 'danger');
                 } catch (error) { console.error('Erro:', error); }
             }
         }
@@ -1060,20 +1546,7 @@
         }
 
         function alertPurchaseNeeded(id) {
-            showNotification('⚠️ Marca primeiro o item como comprado (✓) para registar o preço!', 'warning');
-            const itemCard = document.querySelector(`[data-id="${id}"]`);
-            if (itemCard) {
-                const checkbox = itemCard.querySelector('input[type="checkbox"]');
-                if (checkbox) {
-                    checkbox.style.transform = 'scale(1.5)';
-                    checkbox.style.transition = 'transform 0.3s';
-                    checkbox.style.boxShadow = '0 0 10px rgba(255, 193, 7, 0.8)';
-                    setTimeout(() => {
-                        checkbox.style.transform = 'scale(1)';
-                        checkbox.style.boxShadow = 'none';
-                    }, 1500);
-                }
-            }
+            showNotification('⚠️ Marca primeiro como comprado (✓)', 'warning');
         }
 
         function calculateTotal() {
@@ -1114,19 +1587,18 @@
                 document.getElementById('sendingIndicator').classList.remove('active');
                 const modal = bootstrap.Modal.getInstance(document.getElementById('purchaseModal'));
                 modal.hide();
-                showNotification('✅ Compra registada no histórico!', 'success');
-                
+                showNotification('✅ Compra registada!', 'success');
                 loadPriceHistory(true);
                 
             } catch (error) {
-                console.error('Erro ao enviar:', error);
+                console.error('Erro:', error);
                 document.getElementById('sendingIndicator').classList.remove('active');
                 showNotification('❌ Erro ao registar.', 'danger');
             }
         }
 
         // ==========================================
-        // RENDERIZAÇÃO
+        // RENDERIZAÇÃO - GRELLA DE PRODUTOS
         // ==========================================
         function renderItems() {
             const container = document.getElementById('shoppingList');
@@ -1152,40 +1624,48 @@
 
             let html = '';
             Object.keys(grouped).sort().forEach(category => {
-                const color = categoryColors[category] || '#868e96';
                 const emoji = categoryEmojis[category] || '📦';
-                html += `<div class="mb-4"><h6 class="fw-bold mb-3" style="color: ${color};">${emoji} ${category} (${grouped[category].length})</h6>`;
+                
+                html += `
+                    <div class="category-group">
+                        <div class="category-group-title">
+                            <span>${emoji}</span>
+                            <span>${category}</span>
+                            <span class="count">${grouped[category].length}</span>
+                        </div>
+                        <div class="products-grid">
+                `;
                 
                 grouped[category].forEach(item => {
-                    const creatorInfo = item.createdBy ? `<br><small class="text-muted">Por: ${item.createdBy}</small>` : '';
                     const isCompleted = item.completed;
                     const purchaseButtonAction = isCompleted ? `openPurchaseModal('${item.id}')` : `alertPurchaseNeeded('${item.id}')`;
-                    const purchaseButtonStyle = isCompleted ? '' : 'opacity: 0.6; border-style: dashed;';
-                    const purchaseButtonTitle = isCompleted ? 'Registar Preço e Local' : 'Marca primeiro como comprado';
+                    const purchaseButtonClass = isCompleted ? 'btn-purchase' : 'btn-purchase disabled-purchase';
+                    const purchaseButtonTitle = isCompleted ? 'Registar compra' : 'Marca como comprado primeiro';
                     
                     html += `
-                        <div class="item-card ${isCompleted ? 'checked' : ''}" data-id="${item.id}">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <input type="checkbox" class="form-check-input" ${isCompleted ? 'checked' : ''} onchange="toggleComplete('${item.id}')">
-                                        <span class="item-name fw-bold">${item.name}</span>
-                                        <span class="badge" style="background-color: ${color}; color: white;">${item.quantity} ${item.unit}</span>
-                                        ${isCompleted ? '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Comprado</span>' : ''}
-                                    </div>
-                                    ${creatorInfo}
+                        <div class="item-card ${isCompleted ? 'checked' : ''}">
+                            <div class="item-card-header">
+                                <input type="checkbox" class="item-checkbox" 
+                                       ${isCompleted ? 'checked' : ''} 
+                                       onchange="toggleComplete('${item.id}')">
+                                <span class="item-name">${item.name}</span>
+                                <span class="item-quantity-badge">${item.quantity} ${item.unit}</span>
+                            </div>
+                            <div class="item-card-footer">
+                                <div>
+                                    ${item.createdBy ? `<span class="item-creator"><i class="bi bi-person-fill"></i> ${item.createdBy}</span>` : ''}
+                                    ${isCompleted ? '<span class="completed-badge ms-2"><i class="bi bi-check"></i> Comprado</span>' : ''}
                                 </div>
-                                <div class="d-flex gap-1">
-                                    <button class="btn btn-sm btn-action btn-outline-primary" onclick="openEditModal('${item.id}')" title="Editar">
+                                <div class="item-actions">
+                                    <button class="btn-action btn-edit" onclick="openEditModal('${item.id}')" title="Editar">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-action btn-outline-success" 
+                                    <button class="btn-action ${purchaseButtonClass}" 
                                             onclick="${purchaseButtonAction}" 
-                                            title="${purchaseButtonTitle}"
-                                            style="${purchaseButtonStyle}">
+                                            title="${purchaseButtonTitle}">
                                         <i class="bi bi-cash-coin"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-action btn-outline-danger" onclick="deleteItem('${item.id}')" title="Eliminar">
+                                    <button class="btn-action btn-delete" onclick="deleteItem('${item.id}')" title="Eliminar">
                                         <i class="bi bi-trash"></i>
                                     </button>
                                 </div>
@@ -1193,7 +1673,11 @@
                         </div>
                     `;
                 });
-                html += '</div>';
+                
+                html += `
+                        </div>
+                    </div>
+                `;
             });
             container.innerHTML = html;
         }
@@ -1213,11 +1697,10 @@
         function renderCategoryFilters() {
             const categories = [...new Set(shoppingItems.map(item => item.category))];
             const container = document.getElementById('categoryFilters');
-            let html = '<span class="badge bg-secondary category-badge" onclick="filterByCategory(\'all\')">Todas</span>';
+            let html = '<span class="category-badge" onclick="filterByCategory(\'all\')">Todas</span>';
             categories.forEach(cat => {
-                const color = categoryColors[cat] || '#868e96';
                 const emoji = categoryEmojis[cat] || '📦';
-                html += `<span class="badge category-badge" style="background-color: ${color}; color: white;" onclick="filterByCategory('${cat}')">${emoji} ${cat}</span>`;
+                html += `<span class="category-badge" onclick="filterByCategory('${cat}')">${emoji} ${cat}</span>`;
             });
             container.innerHTML = html;
         }
@@ -1232,7 +1715,7 @@
 
         function exportList() {
             if (shoppingItems.length === 0) { showNotification('Lista vazia!', 'warning'); return; }
-            let text = '🛒 LISTA DE COMPRAS FAMILIAR\n═══════════════════════════════\n';
+            let text = '🧺 LISTA DE COMPRAS\n═══════════════════════════════\n';
             text += `Gerada em: ${new Date().toLocaleString('pt-PT')}\n\n`;
             const grouped = {};
             shoppingItems.forEach(item => {
@@ -1244,7 +1727,7 @@
                 text += `${emoji} ${category}\n───────────────────────────────\n`;
                 grouped[category].forEach(item => {
                     const status = item.completed ? '✓' : '○';
-                    const creator = item.createdBy ? ` (por: ${item.createdBy})` : '';
+                    const creator = item.createdBy ? ` (${item.createdBy})` : '';
                     text += `${status} ${item.name} - ${item.quantity} ${item.unit}${creator}\n`;
                 });
                 text += '\n';
