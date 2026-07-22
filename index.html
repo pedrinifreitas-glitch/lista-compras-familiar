@@ -5,49 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Compras Familiar</title>
     
-    <!-- NOVO FAVICON: Cesto de compras -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧺</text></svg>">
     
-    <!-- NOVA FONTE: Inter (moderna, sem serifa) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
     <style>
-        /* ============================================ */
-        /* NOVO ESQUEMA DE CORES                        */
-        /* ============================================ */
         :root {
-            --primary: #0d9488;        /* Teal - cor principal */
-            --primary-dark: #0f766e;   /* Teal escuro */
-            --primary-light: #ccfbf1;  /* Teal muito claro */
-            --accent: #f97316;         /* Coral/Laranja - destaque */
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #ccfbf1;
+            --accent: #f97316;
             --accent-dark: #ea580c;
             --success: #16a34a;
             --danger: #dc2626;
             --warning: #eab308;
             --info: #0891b2;
-            
-            /* Neutros */
-            --bg: #fafafa;             /* Fundo principal - quase branco */
-            --surface: #ffffff;        /* Superfície dos cards */
-            --border: #e5e7eb;         /* Bordas subtis */
-            --text: #111827;           /* Texto principal - quase preto */
-            --text-secondary: #6b7280; /* Texto secundário */
-            --text-muted: #9ca3af;     /* Texto muito claro */
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+            --text: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
         }
 
-        /* ============================================ */
-        /* BASE                                         */
-        /* ============================================ */
-        * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 
         body {
             background: var(--bg);
@@ -57,9 +43,6 @@
             line-height: 1.6;
         }
 
-        /* ============================================ */
-        /* LAYOUT PRINCIPAL                             */
-        /* ============================================ */
         .main-container {
             background: var(--surface);
             border-radius: 24px;
@@ -70,7 +53,107 @@
         }
 
         /* ============================================ */
-        /* CABEÇALHO                                    */
+        /* ECRÃ INICIAL (ONBOARDING)                    */
+        /* ============================================ */
+        .welcome-screen {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .welcome-logo {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .welcome-options {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-option {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .welcome-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.1);
+        }
+
+        .welcome-option-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .welcome-option-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .welcome-option-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .welcome-form {
+            display: none;
+            text-align: left;
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .welcome-form.active { display: block; }
+
+        .welcome-form h4 {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .welcome-form .btn-back {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .welcome-form .btn-back:hover {
+            color: var(--primary);
+        }
+
+        /* ============================================ */
+        /* CABEÇALHO COM INFO DA FAMÍLIA                */
         /* ============================================ */
         .header {
             text-align: center;
@@ -79,71 +162,125 @@
             margin-bottom: 30px;
         }
 
-        .header-logo {
-            font-size: 4rem;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
+        .header-logo { font-size: 3.5rem; margin-bottom: 10px; }
 
         .header-title {
             color: var(--text);
             font-weight: 800;
-            font-size: 2.2rem;
+            font-size: 2rem;
             letter-spacing: -0.02em;
             margin-bottom: 8px;
         }
 
-        .header-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
+        .family-info-bar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .family-info-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .family-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .family-code-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .family-code-box .code-label {
+            font-size: 0.75rem;
             font-weight: 500;
-            margin: 0;
+            opacity: 0.9;
+            letter-spacing: 0;
+        }
+
+        .btn-copy-code {
+            background: white;
+            color: var(--primary-dark);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-copy-code:hover {
+            transform: scale(1.05);
+        }
+
+        .family-members-count {
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        .btn-leave-family {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-leave-family:hover {
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .sync-status {
             display: inline-block;
-            margin-top: 15px;
-            padding: 6px 14px;
+            margin-top: 12px;
+            padding: 5px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
         }
 
-        .sync-status.online {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-        }
-
-        .sync-status.offline {
-            background: #fee2e2;
-            color: var(--danger);
-        }
+        .sync-status.online { background: var(--primary-light); color: var(--primary-dark); }
+        .sync-status.offline { background: #fee2e2; color: var(--danger); }
 
         /* ============================================ */
         /* USER INFO                                    */
         /* ============================================ */
         .user-info {
-            background: var(--primary);
+            background: var(--info);
             color: white;
-            padding: 18px 24px;
-            border-radius: 16px;
-            margin-bottom: 30px;
+            padding: 16px 22px;
+            border-radius: 14px;
+            margin-bottom: 24px;
         }
 
-        .user-info h5 {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 2px;
-        }
-
-        .user-info p {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin: 0;
-        }
+        .user-info h5 { font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; }
+        .user-info p { font-size: 1.2rem; font-weight: 700; margin: 0; }
 
         /* ============================================ */
-        /* FORMULÁRIO ADICIONAR ITEM                    */
+        /* RESTO DO DESIGN (MANTIDO)                    */
         /* ============================================ */
         .add-form-card {
             background: var(--surface);
@@ -156,16 +293,10 @@
         .add-form-card h5 {
             font-weight: 700;
             font-size: 1.25rem;
-            color: var(--text);
             margin-bottom: 20px;
         }
 
-        .form-label {
-            font-weight: 600;
-            color: var(--text);
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-        }
+        .form-label { font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
 
         .form-control, .form-select {
             border: 2px solid var(--border);
@@ -173,7 +304,6 @@
             padding: 12px 16px;
             font-size: 1rem;
             font-weight: 500;
-            transition: all 0.2s;
         }
 
         .form-control:focus, .form-select:focus {
@@ -181,59 +311,21 @@
             box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1);
         }
 
-        /* ============================================ */
-        /* BOTÕES                                       */
-        /* ============================================ */
         .btn-primary {
             background: var(--primary);
             border: none;
             font-weight: 600;
             padding: 12px 20px;
             border-radius: 12px;
-            transition: all 0.2s;
         }
 
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
+        .btn-primary:hover { background: var(--primary-dark); }
 
-        .btn-success {
-            background: var(--success);
-            border: none;
-            font-weight: 600;
-            padding: 12px 20px;
-            border-radius: 12px;
-        }
+        .btn-success { background: var(--success); border: none; font-weight: 600; padding: 12px 20px; border-radius: 12px; }
+        .btn-danger { background: var(--danger); border: none; font-weight: 600; padding: 12px 20px; border-radius: 12px; }
+        .btn-warning { background: var(--warning); border: none; font-weight: 600; padding: 12px 20px; border-radius: 12px; color: var(--text); }
 
-        .btn-success:hover {
-            background: #15803d;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            border: none;
-            font-weight: 600;
-            padding: 12px 20px;
-            border-radius: 12px;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            border: none;
-            font-weight: 600;
-            padding: 12px 20px;
-            border-radius: 12px;
-            color: var(--text);
-        }
-
-        /* Botões de filtro */
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
+        .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
 
         .filter-buttons .btn {
             border-radius: 12px;
@@ -244,57 +336,29 @@
             color: var(--text-secondary);
         }
 
-        .filter-buttons .btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
         .filter-buttons .btn.active {
             background: var(--primary);
             border-color: var(--primary);
             color: white;
         }
 
-        .filter-buttons .btn-outline-success.active,
-        .filter-buttons .btn-outline-info.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-        }
-
-        /* ============================================ */
-        /* CATEGORIAS - FILTROS                         */
-        /* ============================================ */
-        .category-section-label {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text);
-            margin-bottom: 12px;
-        }
+        .category-section-label { font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
 
         .category-badge {
             font-size: 0.9rem;
             padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.2s;
             font-weight: 600;
             border: 2px solid var(--border);
             background: var(--surface);
             color: var(--text-secondary);
+            transition: all 0.2s;
         }
 
-        .category-badge:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
+        .category-badge:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* ============================================ */
-        /* GRELLA DE PRODUTOS                           */
-        /* ============================================ */
-        .category-group {
-            margin-bottom: 32px;
-        }
+        .category-group { margin-bottom: 32px; }
 
         .category-group-title {
             display: flex;
@@ -302,7 +366,6 @@
             gap: 10px;
             font-size: 1.3rem;
             font-weight: 700;
-            color: var(--text);
             margin-bottom: 16px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--border);
@@ -324,16 +387,12 @@
             gap: 16px;
         }
 
-        /* ============================================ */
-        /* CARD DE PRODUTO                              */
-        /* ============================================ */
         .item-card {
             background: var(--surface);
             border: 2px solid var(--border);
             border-radius: 16px;
             padding: 18px;
             transition: all 0.2s;
-            position: relative;
         }
 
         .item-card:hover {
@@ -342,16 +401,8 @@
             transform: translateY(-2px);
         }
 
-        .item-card.checked {
-            background: #f9fafb;
-            border-color: var(--border);
-            opacity: 0.75;
-        }
-
-        .item-card.checked .item-name {
-            text-decoration: line-through;
-            color: var(--text-muted);
-        }
+        .item-card.checked { background: #f9fafb; opacity: 0.75; }
+        .item-card.checked .item-name { text-decoration: line-through; color: var(--text-muted); }
 
         .item-card-header {
             display: flex;
@@ -360,21 +411,9 @@
             margin-bottom: 12px;
         }
 
-        .item-checkbox {
-            width: 22px;
-            height: 22px;
-            margin-top: 2px;
-            cursor: pointer;
-            accent-color: var(--primary);
-        }
+        .item-checkbox { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--primary); }
 
-        .item-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
-            flex-grow: 1;
-            line-height: 1.3;
-        }
+        .item-name { font-size: 1.1rem; font-weight: 700; flex-grow: 1; line-height: 1.3; }
 
         .item-quantity-badge {
             background: var(--primary);
@@ -393,17 +432,12 @@
             padding-top: 12px;
             border-top: 1px solid var(--border);
             margin-top: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .item-creator {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .item-creator i {
-            color: var(--primary);
-        }
+        .item-creator { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+        .item-creator i { color: var(--primary); }
 
         .completed-badge {
             background: var(--success);
@@ -414,10 +448,7 @@
             font-weight: 700;
         }
 
-        .item-actions {
-            display: flex;
-            gap: 6px;
-        }
+        .item-actions { display: flex; gap: 6px; }
 
         .btn-action {
             width: 36px;
@@ -433,49 +464,13 @@
             transition: all 0.2s;
         }
 
-        .btn-action:hover {
-            transform: translateY(-1px);
-        }
+        .btn-action.btn-edit:hover { border-color: var(--info); color: var(--info); background: #ecfeff; }
+        .btn-action.btn-purchase:hover { border-color: var(--success); color: var(--success); background: #f0fdf4; }
+        .btn-action.btn-delete:hover { border-color: var(--danger); color: var(--danger); background: #fef2f2; }
+        .btn-action.disabled-purchase { opacity: 0.4; border-style: dashed; }
 
-        .btn-action.btn-edit:hover {
-            border-color: var(--info);
-            color: var(--info);
-            background: #ecfeff;
-        }
-
-        .btn-action.btn-purchase:hover {
-            border-color: var(--success);
-            color: var(--success);
-            background: #f0fdf4;
-        }
-
-        .btn-action.btn-delete:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-            background: #fef2f2;
-        }
-
-        .btn-action.disabled-purchase {
-            opacity: 0.4;
-            border-style: dashed;
-        }
-
-        /* ============================================ */
-        /* ESTATÍSTICAS (NO FUNDO)                      */
-        /* ============================================ */
-        .stats-section {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid var(--border);
-        }
-
-        .stats-section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        .stats-section { margin-top: 40px; padding-top: 30px; border-top: 2px solid var(--border); }
+        .stats-section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; text-align: center; }
 
         .stats-grid {
             display: grid;
@@ -489,125 +484,33 @@
             border-radius: 16px;
             padding: 24px 20px;
             text-align: center;
-            transition: all 0.2s;
         }
 
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+        .stat-card.total { border-color: var(--primary); background: var(--primary-light); }
+        .stat-card.completed { border-color: var(--success); background: #f0fdf4; }
+        .stat-card.pending { border-color: var(--accent); background: #fff7ed; }
 
-        .stat-card.total {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .stat-card.completed {
-            border-color: var(--success);
-            background: #f0fdf4;
-        }
-
-        .stat-card.pending {
-            border-color: var(--accent);
-            background: #fff7ed;
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 4px;
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--text);
-            line-height: 1;
-        }
-
+        .stat-icon { font-size: 2rem; margin-bottom: 8px; }
+        .stat-label { font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+        .stat-value { font-size: 2.5rem; font-weight: 800; line-height: 1; }
         .stat-card.total .stat-value { color: var(--primary-dark); }
         .stat-card.completed .stat-value { color: var(--success); }
         .stat-card.pending .stat-value { color: var(--accent-dark); }
 
-        /* ============================================ */
-        /* AÇÕES INFERIORES                             */
-        /* ============================================ */
-        .bottom-actions {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 30px;
-        }
+        .bottom-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 
-        /* ============================================ */
-        /* EMPTY STATE                                  */
-        /* ============================================ */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; opacity: 0.3; }
+        .empty-state h4 { font-weight: 700; color: var(--text); }
 
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
+        .modal-content { border-radius: 20px; border: none; overflow: hidden; }
+        .modal-header { background: var(--primary); color: white; border: none; padding: 20px 24px; }
+        .modal-header.purchase { background: var(--success); }
+        .modal-title { font-weight: 700; font-size: 1.2rem; }
+        .modal-body { padding: 28px; }
+        .modal-footer { border-top: 2px solid var(--border); padding: 16px 24px; }
 
-        .empty-state h4 {
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        /* ============================================ */
-        /* MODAIS                                       */
-        /* ============================================ */
-        .modal-content {
-            border-radius: 20px;
-            border: none;
-            overflow: hidden;
-        }
-
-        .modal-header {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 20px 24px;
-        }
-
-        .modal-header.purchase {
-            background: var(--success);
-        }
-
-        .modal-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .modal-body {
-            padding: 28px;
-        }
-
-        .modal-footer {
-            border-top: 2px solid var(--border);
-            padding: 16px 24px;
-        }
-
-        /* ============================================ */
-        /* AUTOCOMPLETE                                 */
-        /* ============================================ */
-        .product-input-wrapper {
-            position: relative;
-        }
+        .product-input-wrapper { position: relative; }
 
         .history-suggestions {
             position: absolute;
@@ -631,7 +534,6 @@
             padding: 14px 16px;
             border-bottom: 1px solid var(--border);
             cursor: pointer;
-            transition: background 0.15s;
         }
 
         .history-item:hover { background: var(--primary-light); }
@@ -646,24 +548,9 @@
             gap: 5px;
         }
 
-        .history-item-name {
-            font-weight: 700;
-            color: var(--text);
-            font-size: 1rem;
-        }
-
-        .history-best-price {
-            font-weight: 800;
-            color: var(--success);
-            font-size: 1.05rem;
-        }
-
-        .history-item-details {
-            display: flex;
-            gap: 6px;
-            font-size: 0.8rem;
-            flex-wrap: wrap;
-        }
+        .history-item-name { font-weight: 700; font-size: 1rem; }
+        .history-best-price { font-weight: 800; color: var(--success); font-size: 1.05rem; }
+        .history-item-details { display: flex; gap: 6px; font-size: 0.8rem; flex-wrap: wrap; }
 
         .history-savings {
             font-size: 0.8rem;
@@ -686,20 +573,9 @@
             font-weight: 600;
         }
 
-        .history-badge.price-best {
-            background: #f0fdf4;
-            color: var(--success);
-        }
-
-        .history-badge.price-avg {
-            background: #f3f4f6;
-            color: var(--text-secondary);
-        }
-
-        .history-badge.count {
-            background: #ecfeff;
-            color: var(--info);
-        }
+        .history-badge.price-best { background: #f0fdf4; color: var(--success); }
+        .history-badge.price-avg { background: #f3f4f6; color: var(--text-secondary); }
+        .history-badge.count { background: #ecfeff; color: var(--info); }
 
         .history-indicator {
             position: absolute;
@@ -710,9 +586,6 @@
             pointer-events: none;
         }
 
-        /* ============================================ */
-        /* REGISTO DE COMPRA                            */
-        /* ============================================ */
         .price-input-group {
             background: #f9fafb;
             border-radius: 14px;
@@ -736,9 +609,6 @@
         .sending-indicator { display: none; text-align: center; padding: 20px; }
         .sending-indicator.active { display: block; }
 
-        /* ============================================ */
-        /* NOTIFICAÇÕES                                 */
-        /* ============================================ */
         .notification-toast {
             position: fixed;
             top: 20px;
@@ -751,42 +621,32 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
-        /* ============================================ */
-        /* RESPONSIVO                                   */
-        /* ============================================ */
-        @media (max-width: 768px) {
-            .main-container {
-                padding: 20px;
-                margin-top: 15px;
-                margin-bottom: 15px;
-                border-radius: 16px;
-            }
-
-            .header-title {
-                font-size: 1.6rem;
-            }
-
-            .header-logo {
-                font-size: 3rem;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-value {
-                font-size: 2rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+        .code-copied-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--text);
+            color: white;
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
 
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .code-copied-toast.show { opacity: 1; }
+
+        @media (max-width: 768px) {
+            .main-container { padding: 20px; margin-top: 15px; margin-bottom: 15px; border-radius: 16px; }
+            .header-title { font-size: 1.6rem; }
+            .welcome-title { font-size: 1.8rem; }
+            .products-grid { grid-template-columns: 1fr; }
+            .stat-value { font-size: 2rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .family-info-bar { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
@@ -794,154 +654,253 @@
     <div class="container">
         <div class="main-container">
             
-            <!-- CABEÇALHO -->
-            <div class="header">
-                <div class="header-logo">🧺</div>
-                <h1 class="header-title">Lista de Compras</h1>
-                <p class="header-subtitle">Organiza as compras da tua família</p>
-                <div id="syncStatus" class="sync-status offline">
-                    <i class="bi bi-wifi-off"></i> A conectar...
-                </div>
-            </div>
-
-            <!-- USER INFO -->
-            <div class="user-info">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <div>
-                        <h5><i class="bi bi-person-circle"></i> Utilizador</h5>
-                        <p id="currentUserName">Carregando...</p>
+            <!-- ============================================ -->
+            <!-- ECRÃ INICIAL (ONBOARDING)                     -->
+            <!-- ============================================ -->
+            <div id="welcomeScreen" class="welcome-screen">
+                <div class="welcome-logo">🧺</div>
+                <h1 class="welcome-title">Lista de Compras</h1>
+                <p class="welcome-subtitle">Organiza as compras da tua família em conjunto</p>
+                
+                <div class="welcome-options">
+                    <div class="welcome-option" onclick="showCreateFamilyForm()">
+                        <div class="welcome-option-icon">🏠</div>
+                        <div class="welcome-option-title">Criar nova família</div>
+                        <p class="welcome-option-desc">Cria a tua própria lista privada e convida a tua família com um código</p>
                     </div>
-                    <button class="btn btn-light btn-sm" onclick="changeUser()" style="font-weight: 600;">
-                        <i class="bi bi-arrow-repeat"></i> Alterar
+                    
+                    <div class="welcome-option" onclick="showJoinFamilyForm()">
+                        <div class="welcome-option-icon">🔑</div>
+                        <div class="welcome-option-title">Entrar com código</div>
+                        <p class="welcome-option-desc">Junta-te a uma família existente usando o código partilhado contigo</p>
+                    </div>
+                </div>
+                
+                <!-- Formulário Criar Família -->
+                <div id="createForm" class="welcome-form">
+                    <button class="btn-back" onclick="hideForms()">
+                        <i class="bi bi-arrow-left"></i> Voltar
                     </button>
+                    <h4>🏠 Criar nova família</h4>
+                    <form id="createFamilyForm" onsubmit="createFamily(event)">
+                        <div class="mb-3">
+                            <label class="form-label">O teu nome</label>
+                            <input type="text" class="form-control" id="createUserName" placeholder="Ex: João" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nome da família</label>
+                            <input type="text" class="form-control" id="createFamilyName" placeholder="Ex: Família Silva" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-plus-circle"></i> Criar família
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Formulário Entrar com Código -->
+                <div id="joinForm" class="welcome-form">
+                    <button class="btn-back" onclick="hideForms()">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </button>
+                    <h4>🔑 Entrar com código</h4>
+                    <form id="joinFamilyForm" onsubmit="joinFamily(event)">
+                        <div class="mb-3">
+                            <label class="form-label">O teu nome</label>
+                            <input type="text" class="form-control" id="joinUserName" placeholder="Ex: Maria" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Código da família</label>
+                            <input type="text" class="form-control" id="joinFamilyCode" 
+                                   placeholder="Ex: ABC123" required
+                                   style="text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; font-size: 1.2rem; text-align: center;">
+                            <small class="text-muted">Pede o código a quem criou a família</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-box-arrow-in-right"></i> Entrar na família
+                        </button>
+                    </form>
                 </div>
             </div>
 
-            <!-- FORMULÁRIO ADICIONAR ITEM -->
-            <div class="add-form-card">
-                <h5><i class="bi bi-plus-circle" style="color: var(--primary);"></i> Adicionar Produto</h5>
-                <form id="addItemForm">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label for="itemName" class="form-label">Produto</label>
-                            <div class="product-input-wrapper">
-                                <input type="text" class="form-control" id="itemName" 
-                                       placeholder="Ex: Leite, Pão..." required autocomplete="off">
-                                <span class="history-indicator" id="historyIndicator" style="display: none;">
-                                    <i class="bi bi-clock-history"></i>
-                                </span>
-                                <div class="history-suggestions" id="historySuggestions"></div>
+            <!-- ============================================ -->
+            <!-- APP PRINCIPAL (APÓS ENTRAR NA FAMÍLIA)       -->
+            <!-- ============================================ -->
+            <div id="mainApp" style="display: none;">
+                
+                <!-- CABEÇALHO -->
+                <div class="header">
+                    <div class="header-logo">🧺</div>
+                    <h1 class="header-title" id="appTitle">Lista de Compras</h1>
+                    <div id="syncStatus" class="sync-status offline">
+                        <i class="bi bi-wifi-off"></i> A conectar...
+                    </div>
+                </div>
+
+                <!-- BARRA DA FAMÍLIA -->
+                <div class="family-info-bar">
+                    <div class="family-info-left">
+                        <div>
+                            <div class="family-name" id="familyNameDisplay">Família</div>
+                            <div class="family-members-count" id="familyMembersCount">
+                                <i class="bi bi-people-fill"></i> <span id="membersCountText">0 membros</span>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <label for="itemCategory" class="form-label">Categoria</label>
-                            <select class="form-select" id="itemCategory" required>
-                                <option value="">Selecionar...</option>
-                                <option value="Frutas">🍎 Frutas</option>
-                                <option value="Vegetais">🥬 Vegetais</option>
-                                <option value="Laticínios">🥛 Laticínios</option>
-                                <option value="Carnes">🥩 Carnes</option>
-                                <option value="Padaria">🍞 Padaria</option>
-                                <option value="Bebidas">🥤 Bebidas</option>
-                                <option value="Congelados">❄️ Congelados</option>
-                                <option value="Limpeza">🧹 Limpeza</option>
-                                <option value="Higiene">🧴 Higiene</option>
-                                <option value="Outros">📦 Outros</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="itemQuantity" class="form-label">Qtd</label>
-                            <input type="number" class="form-control" id="itemQuantity" min="1" value="1" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="itemUnit" class="form-label">Unidade</label>
-                            <select class="form-select" id="itemUnit">
-                                <option value="un">un</option>
-                                <option value="kg">kg</option>
-                                <option value="lt">lt</option>
-                                <option value="cx">cx</option>
-                                <option value="pct">pct</option>
-                            </select>
-                        </div>
-                        <div class="col-md-1 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="bi bi-plus-lg"></i>
-                            </button>
+                        <div class="family-code-box">
+                            <span class="code-label">Código:</span>
+                            <span id="familyCodeDisplay">------</span>
                         </div>
                     </div>
-                </form>
-            </div>
-
-            <!-- FILTROS -->
-            <div class="filter-buttons">
-                <button class="btn active" onclick="filterItems('all')">
-                    <i class="bi bi-list"></i> Todos
-                </button>
-                <button class="btn" onclick="filterItems('pending')">
-                    <i class="bi bi-clock"></i> Por Comprar
-                </button>
-                <button class="btn" onclick="filterItems('completed')">
-                    <i class="bi bi-check-circle"></i> Comprados
-                </button>
-            </div>
-
-            <div class="mb-4">
-                <div class="category-section-label">Filtrar por categoria</div>
-                <div id="categoryFilters" class="d-flex flex-wrap gap-2">
-                    <span class="category-badge" onclick="filterByCategory('all')">Todas</span>
-                </div>
-            </div>
-
-            <!-- LISTA DE PRODUTOS -->
-            <div id="shoppingList"></div>
-
-            <!-- EMPTY STATE -->
-            <div id="emptyState" class="empty-state" style="display: none;">
-                <i class="bi bi-basket"></i>
-                <h4>A lista está vazia</h4>
-                <p>Adiciona produtos para começar</p>
-            </div>
-
-            <!-- ============================================ -->
-            <!-- ESTATÍSTICAS NO FUNDO (ANTES DO RODAPÉ)      -->
-            <!-- ============================================ -->
-            <div class="stats-section">
-                <div class="stats-section-title">
-                    <i class="bi bi-bar-chart"></i> Resumo da Lista
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card total">
-                        <div class="stat-icon">📋</div>
-                        <div class="stat-label">Total</div>
-                        <div class="stat-value" id="totalItems">0</div>
-                    </div>
-                    <div class="stat-card completed">
-                        <div class="stat-icon">✅</div>
-                        <div class="stat-label">Comprados</div>
-                        <div class="stat-value" id="completedItems">0</div>
-                    </div>
-                    <div class="stat-card pending">
-                        <div class="stat-icon">⏳</div>
-                        <div class="stat-label">Por Comprar</div>
-                        <div class="stat-value" id="pendingItems">0</div>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button class="btn-copy-code" onclick="copyFamilyCode()">
+                            <i class="bi bi-clipboard"></i> Copiar código
+                        </button>
+                        <button class="btn-leave-family" onclick="leaveFamily()">
+                            <i class="bi bi-box-arrow-right"></i> Sair
+                        </button>
                     </div>
                 </div>
 
-                <!-- AÇÕES INFERIORES -->
-                <div class="bottom-actions">
-                    <button class="btn btn-danger" onclick="clearCompleted()">
-                        <i class="bi bi-trash"></i> Limpar Comprados
+                <!-- USER INFO -->
+                <div class="user-info">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <h5><i class="bi bi-person-circle"></i> Utilizador</h5>
+                            <p id="currentUserName">Carregando...</p>
+                        </div>
+                        <button class="btn btn-light btn-sm" onclick="changeUser()" style="font-weight: 600;">
+                            <i class="bi bi-arrow-repeat"></i> Alterar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FORMULÁRIO ADICIONAR ITEM -->
+                <div class="add-form-card">
+                    <h5><i class="bi bi-plus-circle" style="color: var(--primary);"></i> Adicionar Produto</h5>
+                    <form id="addItemForm">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="itemName" class="form-label">Produto</label>
+                                <div class="product-input-wrapper">
+                                    <input type="text" class="form-control" id="itemName" 
+                                           placeholder="Ex: Leite, Pão..." required autocomplete="off">
+                                    <span class="history-indicator" id="historyIndicator" style="display: none;">
+                                        <i class="bi bi-clock-history"></i>
+                                    </span>
+                                    <div class="history-suggestions" id="historySuggestions"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="itemCategory" class="form-label">Categoria</label>
+                                <select class="form-select" id="itemCategory" required>
+                                    <option value="">Selecionar...</option>
+                                    <option value="Frutas">🍎 Frutas</option>
+                                    <option value="Vegetais">🥬 Vegetais</option>
+                                    <option value="Laticínios">🥛 Laticínios</option>
+                                    <option value="Carnes">🥩 Carnes</option>
+                                    <option value="Padaria">🍞 Padaria</option>
+                                    <option value="Bebidas">🥤 Bebidas</option>
+                                    <option value="Congelados">❄️ Congelados</option>
+                                    <option value="Limpeza">🧹 Limpeza</option>
+                                    <option value="Higiene">🧴 Higiene</option>
+                                    <option value="Outros">📦 Outros</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="itemQuantity" class="form-label">Qtd</label>
+                                <input type="number" class="form-control" id="itemQuantity" min="1" value="1" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="itemUnit" class="form-label">Unidade</label>
+                                <select class="form-select" id="itemUnit">
+                                    <option value="un">un</option>
+                                    <option value="kg">kg</option>
+                                    <option value="lt">lt</option>
+                                    <option value="cx">cx</option>
+                                    <option value="pct">pct</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- FILTROS -->
+                <div class="filter-buttons">
+                    <button class="btn active" onclick="filterItems('all')">
+                        <i class="bi bi-list"></i> Todos
                     </button>
-                    <button class="btn btn-warning" onclick="clearAll()">
-                        <i class="bi bi-x-circle"></i> Limpar Tudo
+                    <button class="btn" onclick="filterItems('pending')">
+                        <i class="bi bi-clock"></i> Por Comprar
                     </button>
-                    <button class="btn btn-success" onclick="exportList()">
-                        <i class="bi bi-download"></i> Exportar
+                    <button class="btn" onclick="filterItems('completed')">
+                        <i class="bi bi-check-circle"></i> Comprados
                     </button>
                 </div>
-            </div>
 
+                <div class="mb-4">
+                    <div class="category-section-label">Filtrar por categoria</div>
+                    <div id="categoryFilters" class="d-flex flex-wrap gap-2">
+                        <span class="category-badge" onclick="filterByCategory('all')">Todas</span>
+                    </div>
+                </div>
+
+                <!-- LISTA DE PRODUTOS -->
+                <div id="shoppingList"></div>
+
+                <!-- EMPTY STATE -->
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="bi bi-basket"></i>
+                    <h4>A lista está vazia</h4>
+                    <p>Adiciona produtos para começar</p>
+                </div>
+
+                <!-- ESTATÍSTICAS -->
+                <div class="stats-section">
+                    <div class="stats-section-title">
+                        <i class="bi bi-bar-chart"></i> Resumo da Lista
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card total">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-label">Total</div>
+                            <div class="stat-value" id="totalItems">0</div>
+                        </div>
+                        <div class="stat-card completed">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-label">Comprados</div>
+                            <div class="stat-value" id="completedItems">0</div>
+                        </div>
+                        <div class="stat-card pending">
+                            <div class="stat-icon">⏳</div>
+                            <div class="stat-label">Por Comprar</div>
+                            <div class="stat-value" id="pendingItems">0</div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-actions">
+                        <button class="btn btn-danger" onclick="clearCompleted()">
+                            <i class="bi bi-trash"></i> Limpar Comprados
+                        </button>
+                        <button class="btn btn-warning" onclick="clearAll()">
+                            <i class="bi bi-x-circle"></i> Limpar Tudo
+                        </button>
+                        <button class="btn btn-success" onclick="exportList()">
+                            <i class="bi bi-download"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
         </div>
+    </div>
+
+    <!-- TOAST CÓDIGO COPIADO -->
+    <div id="codeCopiedToast" class="code-copied-toast">
+        ✅ Código copiado!
     </div>
 
     <!-- MODAL EDITAR -->
@@ -1000,12 +959,12 @@
         </div>
     </div>
 
-    <!-- MODAL UTILIZADOR -->
+    <!-- MODAL ALTERAR UTILIZADOR -->
     <div class="modal fade" id="userModal" tabindex="-1">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-person"></i> Identificação</h5>
+                    <h5 class="modal-title"><i class="bi bi-person"></i> Alterar nome</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -1017,7 +976,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="saveUser()">Entrar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveUser()">Guardar</button>
                 </div>
             </div>
         </div>
@@ -1034,59 +993,36 @@
                 <div class="modal-body">
                     <form id="purchaseForm">
                         <input type="hidden" id="purchaseItemId">
-                        
                         <div class="mb-3">
                             <label class="form-label">Produto</label>
-                            <input type="text" class="form-control" id="purchaseProductName" readonly 
-                                   style="background: #f3f4f6; font-weight: 600;">
+                            <input type="text" class="form-control" id="purchaseProductName" readonly style="background: #f3f4f6; font-weight: 600;">
                         </div>
-                        
                         <div class="price-input-group">
                             <div class="row g-3">
                                 <div class="col-6">
                                     <label for="purchaseUnitPrice" class="form-label">Preço Unit. (€)</label>
-                                    <input type="number" class="form-control" id="purchaseUnitPrice" 
-                                           step="0.01" min="0" placeholder="0.00" required 
-                                           oninput="calculateTotal()">
+                                    <input type="number" class="form-control" id="purchaseUnitPrice" step="0.01" min="0" placeholder="0.00" required oninput="calculateTotal()">
                                 </div>
                                 <div class="col-6">
                                     <label for="purchaseQuantity" class="form-label">Quantidade</label>
-                                    <input type="number" class="form-control" id="purchaseQuantity" 
-                                           min="0.01" step="0.01" placeholder="1" required
-                                           oninput="calculateTotal()">
+                                    <input type="number" class="form-control" id="purchaseQuantity" min="0.01" step="0.01" placeholder="1" required oninput="calculateTotal()">
                                 </div>
                             </div>
-                            
-                            <div class="price-display">
-                                Total: <span id="purchaseTotal">0.00</span> €
-                            </div>
+                            <div class="price-display">Total: <span id="purchaseTotal">0.00</span> €</div>
                         </div>
-                        
                         <div class="mb-3">
-                            <label for="purchaseStore" class="form-label">
-                                <i class="bi bi-shop"></i> Local de Compra
-                            </label>
-                            <input type="text" class="form-control" id="purchaseStore" 
-                                   list="storesList" placeholder="Ex: Pingo Doce..." required>
+                            <label for="purchaseStore" class="form-label"><i class="bi bi-shop"></i> Local de Compra</label>
+                            <input type="text" class="form-control" id="purchaseStore" list="storesList" placeholder="Ex: Pingo Doce..." required>
                             <datalist id="storesList">
-                                <option value="Pingo Doce">
-                                <option value="Continente">
-                                <option value="Lidl">
-                                <option value="Aldi">
-                                <option value="Mercadona">
-                                <option value="Minipreço">
+                                <option value="Pingo Doce"><option value="Continente"><option value="Lidl">
+                                <option value="Aldi"><option value="Mercadona"><option value="Minipreço">
                                 <option value="Intermarché">
                             </datalist>
                         </div>
-                        
                         <div class="mb-3">
-                            <label for="purchaseBuyer" class="form-label">
-                                <i class="bi bi-person"></i> Comprado por
-                            </label>
-                            <input type="text" class="form-control" id="purchaseBuyer" readonly 
-                                   style="background: #f3f4f6; font-weight: 600;">
+                            <label for="purchaseBuyer" class="form-label"><i class="bi bi-person"></i> Comprado por</label>
+                            <input type="text" class="form-control" id="purchaseBuyer" readonly style="background: #f3f4f6; font-weight: 600;">
                         </div>
-                        
                         <div id="sendingIndicator" class="sending-indicator">
                             <div class="spinner-border text-success" role="status"></div>
                             <p class="mt-2">A registar...</p>
@@ -1111,7 +1047,7 @@
         // ==========================================
         // CONFIGURAÇÕES - SUBSTITUI PELOS TEUS DADOS!
         // ==========================================
-       const firebaseConfig = {
+        const firebaseConfig = {
   apiKey: "AIzaSyAHZW6ogikDuyWWsYnaxa85jGfSMBzAJ5I",
   authDomain: "lista-compras-familiar-d7a36.firebaseapp.com",
   databaseURL: "https://lista-compras-familiar-d7a36-default-rtdb.europe-west1.firebasedatabase.app",
@@ -1130,15 +1066,18 @@
         // VARIÁVEIS GLOBAIS
         // ==========================================
         let shoppingItems = [];
+        let familyMembers = [];
         let currentFilter = 'all';
         let currentCategoryFilter = 'all';
         let currentUser = localStorage.getItem('currentUser') || '';
-        let unsubscribeListener = null;
+        let currentFamilyId = localStorage.getItem('currentFamilyId') || '';
+        let currentFamilyCode = localStorage.getItem('currentFamilyCode') || '';
+        let currentFamilyName = localStorage.getItem('currentFamilyName') || '';
+        let unsubscribeListeners = [];
         
         let priceHistoryCache = [];
         let historyCacheTimestamp = 0;
         const HISTORY_CACHE_DURATION = 5 * 60 * 1000;
-        
         let searchTimeout = null;
 
         const categoryEmojis = {
@@ -1151,8 +1090,38 @@
         // INICIALIZAÇÃO
         // ==========================================
         document.addEventListener('DOMContentLoaded', function() {
-            checkUser();
+            if (currentFamilyId && currentFamilyCode) {
+                // Já tem família - mostrar app principal
+                showMainApp();
+            } else {
+                // Mostrar ecrã de boas-vindas
+                showWelcomeScreen();
+            }
+        });
+
+        function showWelcomeScreen() {
+            document.getElementById('welcomeScreen').style.display = 'block';
+            document.getElementById('mainApp').style.display = 'none';
+        }
+
+        function showMainApp() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            
+            // Atualizar info da família
+            document.getElementById('familyNameDisplay').textContent = currentFamilyName;
+            document.getElementById('familyCodeDisplay').textContent = currentFamilyCode;
+            document.getElementById('appTitle').textContent = currentFamilyName;
+            
+            // Inicializar app
+            if (currentUser) {
+                document.getElementById('currentUserName').textContent = currentUser;
+            } else {
+                promptForUserName();
+            }
+            
             setupRealtimeListener();
+            setupMembersListener();
             renderItems();
             updateStats();
             renderCategoryFilters();
@@ -1169,228 +1138,307 @@
                     suggestions.classList.remove('active');
                 }
             });
-        });
+        }
 
         // ==========================================
-        // HISTÓRICO DE PREÇOS
+        // GESTÃO DE FAMÍLIAS
         // ==========================================
-        async function loadPriceHistory(forceRefresh = false) {
-            const now = Date.now();
-            
-            if (!forceRefresh && priceHistoryCache.length > 0 && 
-                (now - historyCacheTimestamp) < HISTORY_CACHE_DURATION) {
-                return priceHistoryCache;
+        
+        /**
+         * Gera um código único de 6 caracteres para a família
+         * Exclui caracteres ambíguos: 0, O, 1, I, L
+         */
+        function generateFamilyCode() {
+            const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
             }
+            return code;
+        }
+        
+        function showCreateFamilyForm() {
+            document.getElementById('createForm').classList.add('active');
+            document.getElementById('joinForm').classList.remove('active');
+        }
+        
+        function showJoinFamilyForm() {
+            document.getElementById('joinForm').classList.add('active');
+            document.getElementById('createForm').classList.remove('active');
+        }
+        
+        function hideForms() {
+            document.getElementById('createForm').classList.remove('active');
+            document.getElementById('joinForm').classList.remove('active');
+        }
+        
+        /**
+         * Cria uma nova família com código único
+         */
+        async function createFamily(event) {
+            event.preventDefault();
+            
+            const userName = document.getElementById('createUserName').value.trim();
+            const familyName = document.getElementById('createFamilyName').value.trim();
+            
+            if (!userName || !familyName) return;
             
             try {
-                const response = await fetch(SHEETS_API_URL);
-                const data = await response.json();
+                // Gerar código único e verificar se já existe
+                let code = generateFamilyCode();
+                let codeExists = true;
+                let attempts = 0;
                 
-                if (data.status === 'success') {
-                    priceHistoryCache = data.history || [];
-                    historyCacheTimestamp = now;
-                }
-            } catch (error) {
-                console.error('Erro ao carregar histórico:', error);
-            }
-            
-            return priceHistoryCache;
-        }
-        
-        function searchHistory(query) {
-            if (!query || query.length < 2) return [];
-            const queryLower = query.toLowerCase();
-            return priceHistoryCache.filter(item => 
-                item.productName.toLowerCase().includes(queryLower)
-            ).slice(0, 5);
-        }
-        
-        function showHistorySuggestions(suggestions) {
-            const container = document.getElementById('historySuggestions');
-            const indicator = document.getElementById('historyIndicator');
-            
-            if (!suggestions || suggestions.length === 0) {
-                container.classList.remove('active');
-                indicator.style.display = 'none';
-                return;
-            }
-            
-            indicator.style.display = 'block';
-            
-            let html = '';
-            suggestions.forEach(item => {
-                const bestPriceDisplay = item.bestPrice > 0 
-                    ? `${item.bestPrice.toFixed(2)}€/${item.unit || 'un'}` 
-                    : 'Sem preço';
-                
-                const avgPriceDisplay = item.avgPrice > 0 
-                    ? `Média: ${item.avgPrice.toFixed(2)}€` 
-                    : '';
-                
-                let savingsInfo = '';
-                if (item.savings > 0 && item.savingsPercent > 0) {
-                    savingsInfo = `
-                        <div class="history-savings">
-                            💡 Poupas ${item.savings.toFixed(2)}€ (${item.savingsPercent.toFixed(0)}%) no ${item.bestPriceStore || 'local certo'}
-                        </div>
-                    `;
-                }
-                
-                const purchaseCount = item.totalPurchases > 1 
-                    ? `<span class="history-badge count"><i class="bi bi-bag-check"></i> ${item.totalPurchases}x</span>`
-                    : '';
-                
-                const itemData = encodeURIComponent(JSON.stringify(item));
-                
-                html += `
-                    <div class="history-item" onclick="selectHistoryItem('${itemData}')">
-                        <div class="history-item-header">
-                            <div class="history-item-name">${item.productName}</div>
-                            <div class="history-best-price">
-                                <i class="bi bi-trophy-fill"></i> ${bestPriceDisplay}
-                            </div>
-                        </div>
-                        <div class="history-item-details">
-                            <span class="history-badge price-best">
-                                <i class="bi bi-star-fill"></i> ${item.bestPriceStore || 'N/D'}
-                            </span>
-                            ${avgPriceDisplay ? `
-                                <span class="history-badge price-avg">
-                                    <i class="bi bi-graph-up"></i> ${avgPriceDisplay}
-                                </span>
-                            ` : ''}
-                            ${purchaseCount}
-                        </div>
-                        ${savingsInfo}
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-            container.classList.add('active');
-        }
-        
-        function selectHistoryItem(encodedData) {
-            try {
-                const item = JSON.parse(decodeURIComponent(encodedData));
-                
-                document.getElementById('itemName').value = item.productName;
-                
-                if (item.category) {
-                    const categorySelect = document.getElementById('itemCategory');
-                    for (let option of categorySelect.options) {
-                        if (option.value === item.category) {
-                            categorySelect.value = item.category;
-                            break;
-                        }
+                while (codeExists && attempts < 10) {
+                    const existing = await db.collection('families').where('code', '==', code).get();
+                    codeExists = !existing.empty;
+                    if (codeExists) {
+                        code = generateFamilyCode();
+                        attempts++;
                     }
                 }
                 
-                if (item.unit) {
-                    document.getElementById('itemUnit').value = item.unit;
-                }
-                
-                document.getElementById('historySuggestions').classList.remove('active');
-                document.getElementById('historyIndicator').style.display = 'none';
-                
-                if (item.bestPrice > 0 && item.bestPriceStore) {
-                    showNotification(
-                        `🏆 Melhor preço: ${item.bestPrice.toFixed(2)}€ no ${item.bestPriceStore}`,
-                        'info'
-                    );
-                } else {
-                    showNotification(`📋 Dados preenchidos!`, 'info');
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-            }
-        }
-        
-        function handleProductNameInput() {
-            const query = document.getElementById('itemName').value.trim();
-            clearTimeout(searchTimeout);
-            
-            if (query.length < 2) {
-                document.getElementById('historySuggestions').classList.remove('active');
-                document.getElementById('historyIndicator').style.display = 'none';
-                return;
-            }
-            
-            searchTimeout = setTimeout(() => {
-                const suggestions = searchHistory(query);
-                showHistorySuggestions(suggestions);
-            }, 300);
-        }
-        
-        function handleProductNameFocus() {
-            if (priceHistoryCache.length > 0) {
-                const popular = [...priceHistoryCache]
-                    .sort((a, b) => b.totalPurchases - a.totalPurchases)
-                    .slice(0, 5);
-                if (popular.length > 0) showHistorySuggestions(popular);
-            } else {
-                loadPriceHistory().then(() => {
-                    if (priceHistoryCache.length > 0) {
-                        const popular = [...priceHistoryCache]
-                            .sort((a, b) => b.totalPurchases - a.totalPurchases)
-                            .slice(0, 5);
-                        showHistorySuggestions(popular);
-                    }
+                // Criar família
+                const familyRef = await db.collection('families').add({
+                    name: familyName,
+                    code: code,
+                    createdBy: userName,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
+                
+                const familyId = familyRef.id;
+                
+                // Adicionar criador como primeiro membro
+                await familyRef.collection('members').doc(userName.toLowerCase().replace(/\s/g, '_')).set({
+                    name: userName,
+                    joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    isCreator: true
+                });
+                
+                // Guardar no localStorage
+                localStorage.setItem('currentFamilyId', familyId);
+                localStorage.setItem('currentFamilyCode', code);
+                localStorage.setItem('currentFamilyName', familyName);
+                localStorage.setItem('currentUser', userName);
+                
+                currentFamilyId = familyId;
+                currentFamilyCode = code;
+                currentFamilyName = familyName;
+                currentUser = userName;
+                
+                showNotification(`🎉 Família "${familyName}" criada! Código: ${code}`, 'success');
+                showMainApp();
+                
+            } catch (error) {
+                console.error('Erro ao criar família:', error);
+                showNotification('❌ Erro ao criar família. Tenta novamente.', 'danger');
             }
+        }
+        
+        /**
+         * Entra numa família existente com o código
+         */
+        async function joinFamily(event) {
+            event.preventDefault();
+            
+            const userName = document.getElementById('joinUserName').value.trim();
+            const code = document.getElementById('joinFamilyCode').value.trim().toUpperCase();
+            
+            if (!userName || !code) return;
+            
+            try {
+                // Procurar família pelo código
+                const snapshot = await db.collection('families').where('code', '==', code).get();
+                
+                if (snapshot.empty) {
+                    showNotification('❌ Código inválido. Verifica e tenta novamente.', 'danger');
+                    return;
+                }
+                
+                const familyDoc = snapshot.docs[0];
+                const familyId = familyDoc.id;
+                const familyData = familyDoc.data();
+                
+                // Adicionar membro à família (ou atualizar se já existir)
+                const memberRef = familyDoc.ref.collection('members')
+                    .doc(userName.toLowerCase().replace(/\s/g, '_'));
+                
+                await memberRef.set({
+                    name: userName,
+                    joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    isCreator: false
+                }, { merge: true });
+                
+                // Guardar no localStorage
+                localStorage.setItem('currentFamilyId', familyId);
+                localStorage.setItem('currentFamilyCode', code);
+                localStorage.setItem('currentFamilyName', familyData.name);
+                localStorage.setItem('currentUser', userName);
+                
+                currentFamilyId = familyId;
+                currentFamilyCode = code;
+                currentFamilyName = familyData.name;
+                currentUser = userName;
+                
+                showNotification(`🎉 Bem-vindo à ${familyData.name}!`, 'success');
+                showMainApp();
+                
+            } catch (error) {
+                console.error('Erro ao entrar na família:', error);
+                showNotification('❌ Erro ao entrar. Tenta novamente.', 'danger');
+            }
+        }
+        
+        /**
+         * Sai da família atual
+         */
+        function leaveFamily() {
+            if (confirm('Tens a certeza que queres sair desta família? A tua lista pessoal será removida deste dispositivo.')) {
+                // Limpar listeners
+                unsubscribeListeners.forEach(unsub => unsub());
+                unsubscribeListeners = [];
+                
+                // Limpar localStorage
+                localStorage.removeItem('currentFamilyId');
+                localStorage.removeItem('currentFamilyCode');
+                localStorage.removeItem('currentFamilyName');
+                localStorage.removeItem('currentUser');
+                
+                // Reset variáveis
+                currentFamilyId = '';
+                currentFamilyCode = '';
+                currentFamilyName = '';
+                currentUser = '';
+                shoppingItems = [];
+                familyMembers = [];
+                
+                showNotification('Saíste da família', 'info');
+                showWelcomeScreen();
+            }
+        }
+        
+        /**
+         * Copia o código da família para a área de transferência
+         */
+        function copyFamilyCode() {
+            navigator.clipboard.writeText(currentFamilyCode).then(() => {
+                const toast = document.getElementById('codeCopiedToast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            }).catch(err => {
+                // Fallback para browsers mais antigos
+                const textArea = document.createElement('textarea');
+                textArea.value = currentFamilyCode;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const toast = document.getElementById('codeCopiedToast');
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+            });
+        }
+        
+        function promptForUserName() {
+            const modal = new bootstrap.Modal(document.getElementById('userModal'));
+            modal.show();
         }
 
         // ==========================================
         // UTILIZADOR
         // ==========================================
-        function checkUser() {
-            if (!currentUser) {
-                const modal = new bootstrap.Modal(document.getElementById('userModal'));
-                modal.show();
-            } else {
-                document.getElementById('currentUserName').textContent = currentUser;
-            }
-        }
-
         function changeUser() {
             const modal = new bootstrap.Modal(document.getElementById('userModal'));
             document.getElementById('userName').value = currentUser;
             modal.show();
         }
 
-        function saveUser() {
-            const name = document.getElementById('userName').value.trim();
-            if (name) {
-                currentUser = name;
-                localStorage.setItem('currentUser', currentUser);
-                document.getElementById('currentUserName').textContent = currentUser;
-                const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
-                modal.hide();
-                showNotification(`Olá, ${currentUser}!`, 'success');
+        async function saveUser() {
+            const newName = document.getElementById('userName').value.trim();
+            if (!newName) return;
+            
+            const oldName = currentUser;
+            currentUser = newName;
+            localStorage.setItem('currentUser', currentUser);
+            document.getElementById('currentUserName').textContent = currentUser;
+            
+            // Atualizar membro na família
+            try {
+                const memberRef = db.collection('families').doc(currentFamilyId)
+                    .collection('members').doc(newName.toLowerCase().replace(/\s/g, '_'));
+                
+                await memberRef.set({
+                    name: newName,
+                    joinedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    isCreator: false
+                }, { merge: true });
+                
+                // Se mudou de nome, remover o antigo
+                if (oldName && oldName !== newName) {
+                    const oldMemberRef = db.collection('families').doc(currentFamilyId)
+                        .collection('members').doc(oldName.toLowerCase().replace(/\s/g, '_'));
+                    await oldMemberRef.delete();
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar nome:', error);
             }
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('userModal'));
+            modal.hide();
+            showNotification(`Nome atualizado!`, 'success');
         }
 
         // ==========================================
-        // FIREBASE
+        // FIREBASE - LISTENERS
         // ==========================================
+        
+        /**
+         * Listener para a lista de compras da família atual
+         */
         function setupRealtimeListener() {
             updateSyncStatus('connecting');
             
-            unsubscribeListener = db.collection('shoppingList')
-                .orderBy('createdAt', 'desc')
-                .onSnapshot((snapshot) => {
-                    shoppingItems = [];
-                    snapshot.forEach((doc) => {
-                        shoppingItems.push({ id: doc.id, ...doc.data() });
-                    });
-                    renderItems();
-                    updateStats();
-                    renderCategoryFilters();
-                    updateSyncStatus('online');
-                }, (error) => {
-                    console.error('Erro:', error);
-                    updateSyncStatus('offline');
+            const familyShoppingListRef = db.collection('families')
+                .doc(currentFamilyId)
+                .collection('shoppingList')
+                .orderBy('createdAt', 'desc');
+            
+            const unsub = familyShoppingListRef.onSnapshot((snapshot) => {
+                shoppingItems = [];
+                snapshot.forEach((doc) => {
+                    shoppingItems.push({ id: doc.id, ...doc.data() });
                 });
+                renderItems();
+                updateStats();
+                renderCategoryFilters();
+                updateSyncStatus('online');
+            }, (error) => {
+                console.error('Erro na sincronização:', error);
+                updateSyncStatus('offline');
+            });
+            
+            unsubscribeListeners.push(unsub);
+        }
+        
+        /**
+         * Listener para os membros da família
+         */
+        function setupMembersListener() {
+            const membersRef = db.collection('families')
+                .doc(currentFamilyId)
+                .collection('members');
+            
+            const unsub = membersRef.onSnapshot((snapshot) => {
+                familyMembers = [];
+                snapshot.forEach((doc) => {
+                    familyMembers.push(doc.data());
+                });
+                document.getElementById('membersCountText').textContent = 
+                    `${familyMembers.length} ${familyMembers.length === 1 ? 'membro' : 'membros'}`;
+            });
+            
+            unsubscribeListeners.push(unsub);
         }
 
         function updateSyncStatus(status) {
@@ -1407,12 +1455,20 @@
             }
         }
 
+        // ==========================================
+        // OPERAÇÕES CRUD (AGORA NA SUB-COLEÇÃO)
+        // ==========================================
+        
+        function getShoppingListRef() {
+            return db.collection('families').doc(currentFamilyId).collection('shoppingList');
+        }
+
         document.getElementById('addItemForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!currentUser) {
                 showNotification('Identifica-te primeiro!', 'warning');
-                checkUser();
+                promptForUserName();
                 return;
             }
             
@@ -1427,7 +1483,7 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                await db.collection('shoppingList').add(newItem);
+                await getShoppingListRef().add(newItem);
                 this.reset();
                 document.getElementById('itemQuantity').value = 1;
                 showNotification('Produto adicionado!', 'success');
@@ -1438,9 +1494,9 @@
         });
 
         async function toggleComplete(id) {
-            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); promptForUserName(); return; }
             try {
-                const itemRef = db.collection('shoppingList').doc(id);
+                const itemRef = getShoppingListRef().doc(id);
                 const item = shoppingItems.find(i => i.id === id);
                 if (item) {
                     await itemRef.update({
@@ -1455,10 +1511,10 @@
         }
 
         async function deleteItem(id) {
-            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); promptForUserName(); return; }
             if (confirm('Eliminar este produto?')) {
                 try {
-                    await db.collection('shoppingList').doc(id).delete();
+                    await getShoppingListRef().doc(id).delete();
                     showNotification('Produto eliminado', 'danger');
                 } catch (error) {
                     console.error('Erro:', error);
@@ -1480,7 +1536,7 @@
         }
 
         async function saveEdit() {
-            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); promptForUserName(); return; }
             try {
                 const id = document.getElementById('editItemId').value;
                 const updates = {
@@ -1491,7 +1547,7 @@
                     updatedBy: currentUser,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                await db.collection('shoppingList').doc(id).update(updates);
+                await getShoppingListRef().doc(id).update(updates);
                 const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
                 modal.hide();
                 showNotification('Produto atualizado!', 'success');
@@ -1501,12 +1557,12 @@
         }
 
         async function clearCompleted() {
-            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); promptForUserName(); return; }
             const completedItems = shoppingItems.filter(i => i.completed);
             if (completedItems.length > 0 && confirm(`Eliminar ${completedItems.length} produtos comprados?`)) {
                 try {
                     const batch = db.batch();
-                    completedItems.forEach(item => batch.delete(db.collection('shoppingList').doc(item.id)));
+                    completedItems.forEach(item => batch.delete(getShoppingListRef().doc(item.id)));
                     await batch.commit();
                     showNotification('Comprados eliminados', 'warning');
                 } catch (error) { console.error('Erro:', error); }
@@ -1514,11 +1570,11 @@
         }
 
         async function clearAll() {
-            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); promptForUserName(); return; }
             if (shoppingItems.length > 0 && confirm('Eliminar TODOS os produtos?')) {
                 try {
                     const batch = db.batch();
-                    shoppingItems.forEach(item => batch.delete(db.collection('shoppingList').doc(item.id)));
+                    shoppingItems.forEach(item => batch.delete(getShoppingListRef().doc(item.id)));
                     await batch.commit();
                     showNotification('Lista limpa', 'danger');
                 } catch (error) { console.error('Erro:', error); }
@@ -1526,13 +1582,133 @@
         }
 
         // ==========================================
+        // HISTÓRICO DE PREÇOS
+        // ==========================================
+        async function loadPriceHistory(forceRefresh = false) {
+            const now = Date.now();
+            if (!forceRefresh && priceHistoryCache.length > 0 && 
+                (now - historyCacheTimestamp) < HISTORY_CACHE_DURATION) {
+                return priceHistoryCache;
+            }
+            try {
+                const response = await fetch(SHEETS_API_URL);
+                const data = await response.json();
+                if (data.status === 'success') {
+                    priceHistoryCache = data.history || [];
+                    historyCacheTimestamp = now;
+                }
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+            }
+            return priceHistoryCache;
+        }
+        
+        function searchHistory(query) {
+            if (!query || query.length < 2) return [];
+            const queryLower = query.toLowerCase();
+            return priceHistoryCache.filter(item => 
+                item.productName.toLowerCase().includes(queryLower)
+            ).slice(0, 5);
+        }
+        
+        function showHistorySuggestions(suggestions) {
+            const container = document.getElementById('historySuggestions');
+            const indicator = document.getElementById('historyIndicator');
+            if (!suggestions || suggestions.length === 0) {
+                container.classList.remove('active');
+                indicator.style.display = 'none';
+                return;
+            }
+            indicator.style.display = 'block';
+            let html = '';
+            suggestions.forEach(item => {
+                const bestPriceDisplay = item.bestPrice > 0 
+                    ? `${item.bestPrice.toFixed(2)}€/${item.unit || 'un'}` 
+                    : 'Sem preço';
+                const avgPriceDisplay = item.avgPrice > 0 ? `Média: ${item.avgPrice.toFixed(2)}€` : '';
+                let savingsInfo = '';
+                if (item.savings > 0 && item.savingsPercent > 0) {
+                    savingsInfo = `<div class="history-savings">💡 Poupas ${item.savings.toFixed(2)}€ (${item.savingsPercent.toFixed(0)}%) no ${item.bestPriceStore || 'local certo'}</div>`;
+                }
+                const purchaseCount = item.totalPurchases > 1 
+                    ? `<span class="history-badge count"><i class="bi bi-bag-check"></i> ${item.totalPurchases}x</span>`
+                    : '';
+                const itemData = encodeURIComponent(JSON.stringify(item));
+                html += `
+                    <div class="history-item" onclick="selectHistoryItem('${itemData}')">
+                        <div class="history-item-header">
+                            <div class="history-item-name">${item.productName}</div>
+                            <div class="history-best-price"><i class="bi bi-trophy-fill"></i> ${bestPriceDisplay}</div>
+                        </div>
+                        <div class="history-item-details">
+                            <span class="history-badge price-best"><i class="bi bi-star-fill"></i> ${item.bestPriceStore || 'N/D'}</span>
+                            ${avgPriceDisplay ? `<span class="history-badge price-avg"><i class="bi bi-graph-up"></i> ${avgPriceDisplay}</span>` : ''}
+                            ${purchaseCount}
+                        </div>
+                        ${savingsInfo}
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            container.classList.add('active');
+        }
+        
+        function selectHistoryItem(encodedData) {
+            try {
+                const item = JSON.parse(decodeURIComponent(encodedData));
+                document.getElementById('itemName').value = item.productName;
+                if (item.category) {
+                    const categorySelect = document.getElementById('itemCategory');
+                    for (let option of categorySelect.options) {
+                        if (option.value === item.category) { categorySelect.value = item.category; break; }
+                    }
+                }
+                if (item.unit) document.getElementById('itemUnit').value = item.unit;
+                document.getElementById('historySuggestions').classList.remove('active');
+                document.getElementById('historyIndicator').style.display = 'none';
+                if (item.bestPrice > 0 && item.bestPriceStore) {
+                    showNotification(`🏆 Melhor preço: ${item.bestPrice.toFixed(2)}€ no ${item.bestPriceStore}`, 'info');
+                } else {
+                    showNotification(`📋 Dados preenchidos!`, 'info');
+                }
+            } catch (error) { console.error('Erro:', error); }
+        }
+        
+        function handleProductNameInput() {
+            const query = document.getElementById('itemName').value.trim();
+            clearTimeout(searchTimeout);
+            if (query.length < 2) {
+                document.getElementById('historySuggestions').classList.remove('active');
+                document.getElementById('historyIndicator').style.display = 'none';
+                return;
+            }
+            searchTimeout = setTimeout(() => {
+                const suggestions = searchHistory(query);
+                showHistorySuggestions(suggestions);
+            }, 300);
+        }
+        
+        function handleProductNameFocus() {
+            if (priceHistoryCache.length > 0) {
+                const popular = [...priceHistoryCache].sort((a, b) => b.totalPurchases - a.totalPurchases).slice(0, 5);
+                if (popular.length > 0) showHistorySuggestions(popular);
+            } else {
+                loadPriceHistory().then(() => {
+                    if (priceHistoryCache.length > 0) {
+                        const popular = [...priceHistoryCache].sort((a, b) => b.totalPurchases - a.totalPurchases).slice(0, 5);
+                        showHistorySuggestions(popular);
+                    }
+                });
+            }
+        }
+
+        // ==========================================
         // REGISTO DE COMPRA
         // ==========================================
         function openPurchaseModal(id) {
-            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); checkUser(); return; }
+            if (!currentUser) { showNotification('Identifica-te primeiro!', 'warning'); promptForUserName(); return; }
             const item = shoppingItems.find(i => i.id === id);
             if (!item) return;
-            
             document.getElementById('purchaseItemId').value = item.id;
             document.getElementById('purchaseProductName').value = item.name;
             document.getElementById('purchaseQuantity').value = item.quantity;
@@ -1540,7 +1716,6 @@
             document.getElementById('purchaseUnitPrice').value = '';
             document.getElementById('purchaseStore').value = '';
             document.getElementById('purchaseTotal').textContent = '0.00';
-            
             const modal = new bootstrap.Modal(document.getElementById('purchaseModal'));
             modal.show();
         }
@@ -1558,10 +1733,8 @@
         async function submitPurchase() {
             const form = document.getElementById('purchaseForm');
             if (!form.checkValidity()) { form.reportValidity(); return; }
-            
             const itemId = document.getElementById('purchaseItemId').value;
             const item = shoppingItems.find(i => i.id === itemId);
-            
             const data = {
                 productName: document.getElementById('purchaseProductName').value,
                 category: item ? item.category : '',
@@ -1573,23 +1746,18 @@
                 store: document.getElementById('purchaseStore').value,
                 buyer: document.getElementById('purchaseBuyer').value
             };
-            
             document.getElementById('sendingIndicator').classList.add('active');
-            
             try {
                 await fetch(SHEETS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
+                    method: 'POST', mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                
                 document.getElementById('sendingIndicator').classList.remove('active');
                 const modal = bootstrap.Modal.getInstance(document.getElementById('purchaseModal'));
                 modal.hide();
                 showNotification('✅ Compra registada!', 'success');
                 loadPriceHistory(true);
-                
             } catch (error) {
                 console.error('Erro:', error);
                 document.getElementById('sendingIndicator').classList.remove('active');
@@ -1598,12 +1766,11 @@
         }
 
         // ==========================================
-        // RENDERIZAÇÃO - GRELLA DE PRODUTOS
+        // RENDERIZAÇÃO
         // ==========================================
         function renderItems() {
             const container = document.getElementById('shoppingList');
             const emptyState = document.getElementById('emptyState');
-            
             let filteredItems = shoppingItems;
             if (currentFilter === 'pending') filteredItems = filteredItems.filter(item => !item.completed);
             else if (currentFilter === 'completed') filteredItems = filteredItems.filter(item => item.completed);
@@ -1625,7 +1792,6 @@
             let html = '';
             Object.keys(grouped).sort().forEach(category => {
                 const emoji = categoryEmojis[category] || '📦';
-                
                 html += `
                     <div class="category-group">
                         <div class="category-group-title">
@@ -1635,19 +1801,15 @@
                         </div>
                         <div class="products-grid">
                 `;
-                
                 grouped[category].forEach(item => {
                     const isCompleted = item.completed;
                     const purchaseButtonAction = isCompleted ? `openPurchaseModal('${item.id}')` : `alertPurchaseNeeded('${item.id}')`;
                     const purchaseButtonClass = isCompleted ? 'btn-purchase' : 'btn-purchase disabled-purchase';
                     const purchaseButtonTitle = isCompleted ? 'Registar compra' : 'Marca como comprado primeiro';
-                    
                     html += `
                         <div class="item-card ${isCompleted ? 'checked' : ''}">
                             <div class="item-card-header">
-                                <input type="checkbox" class="item-checkbox" 
-                                       ${isCompleted ? 'checked' : ''} 
-                                       onchange="toggleComplete('${item.id}')">
+                                <input type="checkbox" class="item-checkbox" ${isCompleted ? 'checked' : ''} onchange="toggleComplete('${item.id}')">
                                 <span class="item-name">${item.name}</span>
                                 <span class="item-quantity-badge">${item.quantity} ${item.unit}</span>
                             </div>
@@ -1660,9 +1822,7 @@
                                     <button class="btn-action btn-edit" onclick="openEditModal('${item.id}')" title="Editar">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button class="btn-action ${purchaseButtonClass}" 
-                                            onclick="${purchaseButtonAction}" 
-                                            title="${purchaseButtonTitle}">
+                                    <button class="btn-action ${purchaseButtonClass}" onclick="${purchaseButtonAction}" title="${purchaseButtonTitle}">
                                         <i class="bi bi-cash-coin"></i>
                                     </button>
                                     <button class="btn-action btn-delete" onclick="deleteItem('${item.id}')" title="Eliminar">
@@ -1673,11 +1833,7 @@
                         </div>
                     `;
                 });
-                
-                html += `
-                        </div>
-                    </div>
-                `;
+                html += `</div></div>`;
             });
             container.innerHTML = html;
         }
@@ -1715,7 +1871,8 @@
 
         function exportList() {
             if (shoppingItems.length === 0) { showNotification('Lista vazia!', 'warning'); return; }
-            let text = '🧺 LISTA DE COMPRAS\n═══════════════════════════════\n';
+            let text = `🧺 ${currentFamilyName.toUpperCase()}\n`;
+            text += '═══════════════════════════════\n';
             text += `Gerada em: ${new Date().toLocaleString('pt-PT')}\n\n`;
             const grouped = {};
             shoppingItems.forEach(item => {
@@ -1736,7 +1893,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `lista-compras-${new Date().toISOString().split('T')[0]}.txt`;
+            a.download = `lista-${currentFamilyName}-${new Date().toISOString().split('T')[0]}.txt`;
             a.click();
             URL.revokeObjectURL(url);
             showNotification('Lista exportada!', 'success');
@@ -1751,7 +1908,7 @@
         }
 
         window.addEventListener('beforeunload', function() {
-            if (unsubscribeListener) unsubscribeListener();
+            unsubscribeListeners.forEach(unsub => unsub());
         });
     </script>
 </body>
